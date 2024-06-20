@@ -210,6 +210,7 @@ public class Board : MonoBehaviour
             return;
         }
 
+        GameManager.GameEvents.GuessMade.TriggerEvent();
         string remaining = word;
 
         // First pass: Check for correct letters
@@ -248,6 +249,7 @@ public class Board : MonoBehaviour
             GameManager.GameEvents.GameEnd.TriggerEvent();
             correctWordText.SetActive(true);
             enabled = false;
+            GameManager.GameEvents.GameWon.TriggerEvent();
         }
 
         rowIndex++;

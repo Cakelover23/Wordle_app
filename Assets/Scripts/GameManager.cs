@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
             public static GameEvents GameEnd = new GameEvents();
             public static GameEvents GameLost = new GameEvents();
             public static GameEvents GameWon = new GameEvents();
+            public static GameEvents GuessMade = new GameEvents();
             
             public event Action onGameEvent;
 
@@ -20,25 +21,6 @@ public class GameManager : MonoBehaviour
                 onGameEvent?.Invoke();
             }
         }
-    public GameObject PauseScreen;
-    public GameObject PauseButton;
-    public GameObject Keyboard;
-
-    public void PauseGame()
-    {
-        PauseScreen.SetActive(true);
-        PauseButton.SetActive(false);
-        Keyboard.SetActive(false);
-        Time.timeScale = 0;
-    }
-
-    public void ResumeGame()
-    {
-        PauseScreen.SetActive(false);
-        PauseButton.SetActive(true);
-        Keyboard.SetActive(true);
-        Time.timeScale = 1;
-    }
     
     public void LoadFiveLetterGame()
     {
@@ -50,24 +32,4 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("SixLetterWordle");
     }
 
-    private void OnGameStart()
-    {
-        PauseButton.SetActive(true);
-    }
-
-    private void OnGameEnd()
-    {
-        PauseButton.SetActive(false);
-    }
-
-    private void OnEnable()
-    {
-        GameEvents.GameStart.onGameEvent += OnGameStart;
-        GameEvents.GameEnd.onGameEvent += OnGameEnd;
-    }
-    private void OnDisable()
-    {  
-        GameEvents.GameStart.onGameEvent -= OnGameStart;
-        GameEvents.GameEnd.onGameEvent -= OnGameEnd;
-    }
 }
