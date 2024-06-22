@@ -15,6 +15,7 @@ public class UIManager : MonoBehaviour
     public GameObject PauseButton;
     public GameObject Keyboard;
     public GameObject StatScreen;
+    public GameObject CorrectWordText;
 
 
     [Header("Text Boxes")]
@@ -23,6 +24,7 @@ public class UIManager : MonoBehaviour
     public Text TotalGamesTXT;
     public Text TotalLossTXT;
     public Text TotalGuessTXT;
+
 //-------------------------------------------------------------------------
     public void DisplayStats()
     {
@@ -54,26 +56,34 @@ public class UIManager : MonoBehaviour
         Time.timeScale = 1;
     }
 
-     private void OnGameStart()
+     private void UIGameStart()
     {
-        PauseButton.SetActive(true);
+        CorrectWordText.SetActive(false);
+        ResumeGame();
+
     }
 
-    private void OnGameEnd()
+    private void UIGameEnd()
     {
         PauseButton.SetActive(false);
     }
 
+    private void UIGameLost()
+    {
+        CorrectWordText.SetActive(true);
+    }
        private void OnEnable()
     {
-        GameManager.GameEvents.GameStart.onGameEvent += OnGameStart;
-        GameManager.GameEvents.GameEnd.onGameEvent += OnGameEnd;
+        GameManager.GameEvents.GameStart.onGameEvent += UIGameStart;
+        GameManager.GameEvents.GameEnd.onGameEvent += UIGameEnd;
+        GameManager.GameEvents.GameLost.onGameEvent += UIGameLost;
     }
 
     private void OnDisable()
     {  
-        GameManager.GameEvents.GameStart.onGameEvent -= OnGameStart;
-        GameManager.GameEvents.GameEnd.onGameEvent -= OnGameEnd;
+        GameManager.GameEvents.GameStart.onGameEvent -= UIGameStart;
+        GameManager.GameEvents.GameEnd.onGameEvent -= UIGameEnd;
+        GameManager.GameEvents.GameLost.onGameEvent -= UIGameLost;
     }
 }
 

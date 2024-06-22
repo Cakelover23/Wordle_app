@@ -25,7 +25,7 @@ public class Board : MonoBehaviour
     [Header("Tiles")]
     public Tile.State emptyState;
     public Tile.State occupiedState;
-    public Tile.State correctState;
+    public Tile.State correctState; 
     public Tile.State wrongSpotState;
     public Tile.State incorrectState;
 
@@ -33,7 +33,8 @@ public class Board : MonoBehaviour
     public GameObject tryAgainButton;
     public GameObject newWordButton;
     public GameObject invalidWordText;
-    public GameObject correctWordText;
+    public TMP_Text correctWordText;
+    public GameManager Keyboard;
 
     // Add references to the UI Buttons
     public Button[] letterButtons;
@@ -131,6 +132,7 @@ public class Board : MonoBehaviour
     private void SetRandomWord()
     {
         word = solutions[Random.Range(0, solutions.Length)].ToLower().Trim();
+        correctWordText.GetComponent<TMP_Text>().SetText(word);
         Debug.Log("New word set: " + word);
     }
 
@@ -239,28 +241,34 @@ public class Board : MonoBehaviour
                 else
                 {
                     tile.SetState(incorrectState);
-                    DisableLetterButton(tile.letter);
+                    DisableLetterButton(tile.letter); // This line disables the letter on the keyboard UI
                 }
             }
         }
+        rowIndex++;
+        columnIndex = 0;
 
         if (HasWon(row))
         {
             GameManager.GameEvents.GameEnd.TriggerEvent();
-            correctWordText.SetActive(true);
+            //correctWordText.SetActive(true);
             enabled = false;
             GameManager.GameEvents.GameWon.TriggerEvent();
+            return;
         }
 
-        rowIndex++;
-        columnIndex = 0;
-
-        if (rowIndex >= rows.Length)
-        {
-            correctWordText.SetActive(true);
-            enabled = false;
-        }
+    if (rowIndex >= rows.Length)
+    {
+        // Assuming GameManager.GameEvents has a GameLost event
+        GameManager.GameEvents.GameEnd.TriggerEvent();
+        GameManager.GameEvents.GameLost.TriggerEvent(); // Trigger the losing event
+        // Update UI or state to reflect the game loss
+        // For example, showing a "Try Again" button or a loss message
+        tryAgainButton.SetActive(true);
+        enabled = false; // Disable further input or game actions
     }
+}
+    
 
     private bool IsValidWord(string word)
     {
@@ -298,7 +306,7 @@ public class Board : MonoBehaviour
     {
         tryAgainButton.SetActive(false);
         newWordButton.SetActive(false);
-        correctWordText.SetActive(false);
+        //correctWordText.SetActive(false);
     }
 
     private void OnDisable()
@@ -309,10 +317,11 @@ public class Board : MonoBehaviour
 
     private void DisableLetterButton(char letter)
     {
-        letter = char.ToUpper(letter); // Ensure we match the letter buttons which are likely uppercase
+        Debug.Log($"Attempting to disable letter: {letter}");
+
         if (letterButtonMap.ContainsKey(letter))
         {
-            letterButtonMap[letter].interactable = false;
+          letterButtonMap[letter].interactable = false;
         }
     }
 }

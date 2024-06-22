@@ -913,7 +913,7 @@ RectTransform:
   m_GameObject: {fileID: 124073957}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 4, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 734370149}
@@ -956,7 +956,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: Pause
+  m_Text: ll
 --- !u!222 &124073960
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2469,6 +2469,7 @@ MonoBehaviour:
   PauseButton: {fileID: 734370148}
   Keyboard: {fileID: 2055134311}
   StatScreen: {fileID: 5478785042373093481}
+  CorrectWordText: {fileID: 1370117952}
   TotalWinTXT: {fileID: 1742618988208769969}
   CurrentWinTXT: {fileID: 8267491208048374720}
   TotalGamesTXT: {fileID: 4756712357190637497}
@@ -3835,7 +3836,7 @@ RectTransform:
   m_GameObject: {fileID: 734370148}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 124073958}
@@ -3843,7 +3844,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 270, y: 987.8}
+  m_AnchoredPosition: {x: 350, y: 987.8}
   m_SizeDelta: {x: 340, y: 128}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &734370150
@@ -6509,8 +6510,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4283979606
-  m_fontColor: {r: 0.3372549, g: 0.34117648, b: 0.34509805, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -6527,8 +6528,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 32
-  m_fontSizeBase: 32
+  m_fontSize: 50
+  m_fontSizeBase: 50
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -8886,7 +8887,8 @@ MonoBehaviour:
   tryAgainButton: {fileID: 799967939}
   newWordButton: {fileID: 629275722}
   invalidWordText: {fileID: 1962657229}
-  correctWordText: {fileID: 1370117952}
+  correctWordText: {fileID: 1370117954}
+  Keyboard: {fileID: 611032950}
   letterButtons:
   - {fileID: 248381163}
   - {fileID: 1968343547}
@@ -9371,8 +9373,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4283979606
-  m_fontColor: {r: 0.3372549, g: 0.34117648, b: 0.34509805, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -9389,8 +9391,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 32
-  m_fontSizeBase: 32
+  m_fontSize: 50
+  m_fontSizeBase: 50
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -11997,7 +11999,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 2862193244200612752}
   m_OnClick:
     m_PersistentCalls:
