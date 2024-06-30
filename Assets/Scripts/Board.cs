@@ -37,6 +37,11 @@ public class Board : MonoBehaviour
     public GameManager Keyboard;
 
     // Add references to the UI Buttons
+    public Color defaultColor;
+    public Color incorrectColor;
+    public Color correctColor;
+    public Color wrongSpotColor;
+
     public Button[] letterButtons;
     public Button backspaceButton;
     public Button enterButton;
@@ -107,12 +112,7 @@ public class Board : MonoBehaviour
         ClearBoard();
         SetRandomWord();
         GameManager.GameEvents.GameStart.TriggerEvent();
-        // Enable all letter buttons at the start of a new game
-        foreach (Button button in letterButtons)
-        {
-            button.interactable = true;
-        }
-
+        ResetAllLetterButtons();
         enabled = true;
     }
 
@@ -223,6 +223,7 @@ public class Board : MonoBehaviour
             {
                 tile.SetState(correctState);
                 remaining = remaining.Remove(i, 1).Insert(i, " ");
+                CorrectLetterButton(tile.letter);
             }
         }
 
@@ -237,6 +238,8 @@ public class Board : MonoBehaviour
                     tile.SetState(wrongSpotState);
                     int index = remaining.IndexOf(tile.letter);
                     remaining = remaining.Remove(index, 1).Insert(index, " ");
+                    WrongSpotLetterButton(tile.letter);
+
                 }
                 else
                 {
@@ -263,8 +266,6 @@ public class Board : MonoBehaviour
         GameManager.GameEvents.GameEnd.TriggerEvent();
         GameManager.GameEvents.GameLost.TriggerEvent(); // Trigger the losing event
         // Update UI or state to reflect the game loss
-        // For example, showing a "Try Again" button or a loss message
-        tryAgainButton.SetActive(true);
         enabled = false; // Disable further input or game actions
     }
 }
@@ -304,24 +305,59 @@ public class Board : MonoBehaviour
 
     private void OnEnable()
     {
-        tryAgainButton.SetActive(false);
+        
         newWordButton.SetActive(false);
         //correctWordText.SetActive(false);
     }
 
     private void OnDisable()
     {
-        tryAgainButton.SetActive(true);
+        
         newWordButton.SetActive(true);
     }
 
     private void DisableLetterButton(char letter)
     {
         Debug.Log($"Attempting to disable letter: {letter}");
+    
+        if (letterButtonMap.ContainsKey(letter) && letterButtonMap[letter].colors.normalColor != correctColor && letterButtonMap[letter].colors.normalColor != wrongSpotColor)
+        {
+            ColorBlock colors = letterButtonMap[letter].colors;
+            colors.normalColor = incorrectColor;
+            letterButtonMap[letter].colors = colors;
+        }
+    }
 
+    private void CorrectLetterButton(char letter)
+    {
         if (letterButtonMap.ContainsKey(letter))
         {
-          letterButtonMap[letter].interactable = false;
+            ColorBlock colors = letterButtonMap[letter].colors;
+            colors.normalColor = correctColor;
+            letterButtonMap[letter].colors = colors;
+        }
+    }
+
+    private void WrongSpotLetterButton(char letter)
+    {
+        if (letterButtonMap.ContainsKey(letter))
+        {
+            if(letterButtonMap[letter].colors.normalColor != correctColor)
+            {
+                ColorBlock colors = letterButtonMap[letter].colors;
+                colors.normalColor = wrongSpotColor;
+                letterButtonMap[letter].colors = colors;
+            }
+        }
+    }
+
+    private void ResetAllLetterButtons()
+    {
+        foreach (Button button in letterButtons)
+        {
+            ColorBlock colors = button.colors;
+            colors.normalColor = defaultColor;
+            button.colors = colors;
         }
     }
 }
