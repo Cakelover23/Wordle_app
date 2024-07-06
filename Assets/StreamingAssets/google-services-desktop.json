@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "718241190631",
+    "project_id": "wordguesser-c0d34",
+    "storage_bucket": "wordguesser-c0d34.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:718241190631:android:0692a9615b6f3319884842",
+        "android_client_info": {
+          "package_name": "com.codyromano.wordguesser"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDfNOwTL6ylwjl63vY9K0C6hssaFmAlhQA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

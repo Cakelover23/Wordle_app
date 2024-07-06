@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class Stats : MonoBehaviour
 {
@@ -15,7 +17,12 @@ public class Stats : MonoBehaviour
     public int _totalLosses;
     //[HideInInspector]
     public int _totalGuesses;
+    public string _username;
+    public GameObject UsernameInput;
+    public UIManager UIManager;
     
+    
+    private const string UsernameKey = "Username";
     private const string TotalWinsKey = "TotalWins";
     private const string CurrentWinStreakKey = "CurrentWinStreak";
     private const string TotalGamesPlayedKey = "TotalGamesPlayed";
@@ -25,6 +32,7 @@ public class Stats : MonoBehaviour
     private void Start()
     {
         LoadStats();
+        SetupUsername();
     }
 
     public void AddToWin()
@@ -34,6 +42,28 @@ public class Stats : MonoBehaviour
         _totalGamesPlayed++;
         SaveStats();
         Debug.Log("Adding to stats");
+    }
+    private void SetupUsername()
+    {
+       if (string.IsNullOrEmpty(PlayerPrefs.GetString(UsernameKey)))
+       {
+            UsernameInput.SetActive(true);
+            UIManager.UsernameBeingInput();
+
+       }
+        else
+        {
+            _username = PlayerPrefs.GetString(UsernameKey);
+        }
+        
+        Debug.Log("Username is: " + _username);
+    }
+    public void SubmitUsername()
+    {
+        _username = UsernameInput.GetComponentInChildren<InputField>().text;
+        PlayerPrefs.SetString("Username", _username);
+        UsernameInput.SetActive(false);
+        UIManager.UsernameSubmitted();
     }
 
     public void AddToLosses()
