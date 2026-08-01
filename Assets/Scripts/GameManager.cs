@@ -32,4 +32,26 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("SixLetterWordle");
     }
 
+    /// <summary>Records the chosen word bank, then loads the matching game scene for it.</summary>
+    public void SelectCategoryAndPlay(string categoryId)
+    {
+        WordCategory category = WordCategoryDatabase.GetById(categoryId);
+        if (category == null)
+        {
+            Debug.LogWarning($"GameManager: unknown category id '{categoryId}'.");
+            return;
+        }
+
+        CategorySelectionService.SelectCategory(categoryId);
+
+        if (category.wordLength == 6)
+        {
+            LoadSixLetterGame();
+        }
+        else
+        {
+            LoadFiveLetterGame();
+        }
+    }
+
 }

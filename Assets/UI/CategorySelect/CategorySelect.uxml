@@ -1,0 +1,16 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement name="root" class="category-select-root">
+        <ui:Label text="Choose a Word Bank" name="title-label" class="title" />
+
+        <ui:VisualElement name="length-tabs" class="length-tabs">
+            <ui:Button name="tab-five-letter" text="5 Letters" class="tab-button tab-button--active" />
+            <ui:Button name="tab-six-letter" text="6 Letters" class="tab-button" />
+        </ui:VisualElement>
+
+        <ui:ScrollView name="category-scroll" class="category-scroll">
+            <ui:VisualElement name="category-list" class="category-list" />
+        </ui:ScrollView>
+
+        <ui:Button name="back-button" text="Back" class="back-button" />
+    </ui:VisualElement>
+</ui:UXML>

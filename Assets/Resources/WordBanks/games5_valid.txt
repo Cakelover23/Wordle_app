@@ -1,0 +1,10 @@
+level
+quest
+board
+power
+combo
+spawn
+reset
+pixel
+bonus
+round

@@ -1,0 +1,6 @@
+sprint
+tackle
+defend
+attack
+umpire
+strike

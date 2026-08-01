@@ -98,12 +98,23 @@ public class Board : MonoBehaviour
         NewGame();
     }
 
+    // Word length for this board; SixBoard overrides this to 6.
+    protected virtual int WordLength => 5;
+
+    // Used only if no matching WordCategory can be found (keeps old scenes working untouched).
+    protected virtual string DefaultSolutionsResource => "official_wordle_common";
+    protected virtual string DefaultValidWordsResource => "official_wordle_all";
+
     protected virtual void LoadData()
     {
-        TextAsset textFile = Resources.Load("official_wordle_common") as TextAsset;
+        WordCategory category = CategorySelectionService.GetSelectedCategory(WordLength);
+        string solutionsPath = category != null ? category.solutionsPath : DefaultSolutionsResource;
+        string validWordsPath = category != null ? category.validWordsPath : DefaultValidWordsResource;
+
+        TextAsset textFile = Resources.Load<TextAsset>(solutionsPath);
         solutions = textFile.text.Split('\n');
 
-        textFile = Resources.Load("official_wordle_all") as TextAsset;
+        textFile = Resources.Load<TextAsset>(validWordsPath);
         validWords = new HashSet<string>(textFile.text.Split('\n'));
     }
 
