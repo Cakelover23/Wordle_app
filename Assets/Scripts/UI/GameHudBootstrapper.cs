@@ -73,13 +73,15 @@ public static class GameHudBootstrapper
         }
 
         var settings = ScriptableObject.CreateInstance<PanelSettings>();
-        // ConstantPixelSize maps 1 USS px to 1 real screen px on any device/window, so
-        // GameHud.uss values (authored for a 1440px-wide target phone screen) render at a
-        // consistent, predictable size both in the Editor Game View and on the actual device -
-        // unlike ScaleWithScreenSize, which shrinks everything toward zero whenever the render
-        // target is smaller than the reference resolution (as any desktop Editor window
-        // inevitably is compared to 1440x3200).
-        settings.scaleMode = PanelScaleMode.ConstantPixelSize;
+        // ScaleWithScreenSize against the project's actual target resolution (1440x3200
+        // portrait phone) scales the whole panel proportionally to fit whatever the current
+        // render target size is - pixel-accurate at 1440x3200 (the real device) and cleanly
+        // scaled down (no cropping/overflow) in a smaller Editor Game View, as long as
+        // GameHud.uss values are sized for the 1440x3200 reference (which they are).
+        settings.scaleMode = PanelScaleMode.ScaleWithScreenSize;
+        settings.referenceResolution = new Vector2Int(1440, 3200);
+        settings.screenMatchMode = PanelScreenMatchMode.MatchWidthOrHeight;
+        settings.match = 0.5f;
 
         var theme = Resources.Load<ThemeStyleSheet>(ThemeResourcePath);
         if (theme != null)

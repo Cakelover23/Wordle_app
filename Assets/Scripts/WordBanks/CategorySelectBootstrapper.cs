@@ -60,12 +60,12 @@ public static class CategorySelectBootstrapper
     private static PanelSettings LoadOrCreatePanelSettings()
     {
         // Prefer a hand-tuned PanelSettings asset if one is ever added at this path; otherwise
-        // fall back to sane runtime defaults. ConstantPixelSize maps 1 USS px to 1 real screen
-        // px on any device/window, so CategorySelect.uss values (authored for a 1440px-wide
-        // target phone screen) render at a consistent, predictable size both in the Editor
-        // Game View and on the actual device - unlike ScaleWithScreenSize, which shrinks
-        // everything toward zero whenever the render target is smaller than the reference
-        // resolution (as any desktop Editor window inevitably is compared to 1440x3200).
+        // fall back to sane runtime defaults. ScaleWithScreenSize against the project's actual
+        // target resolution (1440x3200 portrait phone) scales the whole panel proportionally to
+        // fit whatever the current render target size is - so it renders pixel-accurate at
+        // 1440x3200 (the real device) and scales down cleanly (no cropping/overflow) in a
+        // smaller Editor Game View, as long as CategorySelect.uss values are sized for the
+        // 1440x3200 reference (which they are).
         PanelSettings existing = Resources.Load<PanelSettings>(PanelSettingsResourcePath);
         if (existing != null)
         {
@@ -73,7 +73,10 @@ public static class CategorySelectBootstrapper
         }
 
         var settings = ScriptableObject.CreateInstance<PanelSettings>();
-        settings.scaleMode = PanelScaleMode.ConstantPixelSize;
+        settings.scaleMode = PanelScaleMode.ScaleWithScreenSize;
+        settings.referenceResolution = new Vector2Int(1440, 3200);
+        settings.screenMatchMode = PanelScreenMatchMode.MatchWidthOrHeight;
+        settings.match = 0.5f;
 
         // Every element we use in CategorySelect.uss sets its own explicit colors, so this
         // screen renders fine without a theme. Without one, Unity logs a benign
