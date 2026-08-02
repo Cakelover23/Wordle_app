@@ -116,6 +116,19 @@ public class Board : MonoBehaviour
 
         textFile = Resources.Load<TextAsset>(validWordsPath);
         validWords = new HashSet<string>(textFile.text.Split('\n'));
+
+        // Themed categories share the big classic dictionaries as their valid-guess list, so
+        // make sure every one of this category's own solution words is guessable too, even if
+        // a particular themed word (e.g. a genre or franchise-adjacent term) isn't in that
+        // dictionary.
+        foreach (string solution in solutions)
+        {
+            string trimmed = solution.ToLower().Trim();
+            if (trimmed.Length > 0)
+            {
+                validWords.Add(trimmed);
+            }
+        }
     }
 
     public void NewGame()

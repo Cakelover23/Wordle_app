@@ -1,6 +1,0 @@
-sequel
-action
-script
-camera
-studio
-thrill
