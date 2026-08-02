@@ -1,0 +1,120 @@
+.hud-root {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.top-bar {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    flex-direction: row;
+}
+
+.chrome-button {
+    margin-left: 6px;
+    padding: 6px 12px;
+    background-color: rgba(30, 30, 36, 0.85);
+    color: rgb(230, 230, 230);
+    border-width: 0;
+    border-radius: 6px;
+    font-size: 12px;
+}
+
+.modal-backdrop {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.55);
+    align-items: center;
+    justify-content: center;
+}
+
+.hidden {
+    display: none;
+}
+
+.modal-card {
+    width: 320px;
+    max-width: 85%;
+    background-color: rgb(38, 38, 44);
+    border-radius: 12px;
+    padding: 20px;
+    align-items: stretch;
+}
+
+.modal-title {
+    font-size: 22px;
+    -unity-font-style: bold;
+    color: rgb(240, 240, 240);
+    -unity-text-align: upper-center;
+    margin-bottom: 14px;
+}
+
+.modal-button {
+    margin-top: 14px;
+    padding: 10px;
+    background-color: rgb(83, 141, 78);
+    color: rgb(255, 255, 255);
+    border-width: 0;
+    border-radius: 8px;
+}
+
+.stats-row {
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 6px 2px;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+.stats-label {
+    color: rgb(190, 190, 190);
+    font-size: 14px;
+}
+
+.stats-value {
+    color: rgb(240, 240, 240);
+    font-size: 14px;
+    -unity-font-style: bold;
+}
+
+.leaderboard-scroll {
+    max-height: 320px;
+}
+
+.leaderboard-list {
+    flex-direction: column;
+}
+
+.leaderboard-row {
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 8px;
+    margin-bottom: 4px;
+    background-color: rgb(48, 48, 55);
+    border-radius: 6px;
+}
+
+.leaderboard-rank {
+    width: 32px;
+    color: rgb(190, 190, 190);
+}
+
+.leaderboard-name {
+    flex-grow: 1;
+    color: rgb(240, 240, 240);
+}
+
+.leaderboard-score {
+    color: rgb(240, 240, 240);
+    -unity-font-style: bold;
+}
+
+.username-field {
+    margin-bottom: 4px;
+}

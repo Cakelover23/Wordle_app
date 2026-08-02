@@ -66,6 +66,25 @@ public class Stats : MonoBehaviour
         UIManager.UsernameSubmitted();
     }
 
+    /// <summary>Whether a username has already been chosen (loaded from PlayerPrefs or submitted this run).</summary>
+    public bool HasUsername => !string.IsNullOrEmpty(_username);
+
+    /// <summary>
+    /// UI-framework-agnostic username submission, for callers (e.g. a UI Toolkit HUD) that
+    /// already have the entered text and don't use the legacy uGUI InputField/UsernameInput panel.
+    /// </summary>
+    public void SubmitUsernameText(string username)
+    {
+        if (string.IsNullOrWhiteSpace(username))
+        {
+            return;
+        }
+
+        _username = username.Trim();
+        PlayerPrefs.SetString(UsernameKey, _username);
+        PlayerPrefs.Save();
+    }
+
     public void AddToLosses()
     {
         _totalLosses++;
