@@ -60,10 +60,10 @@ public static class CategorySelectBootstrapper
     private static PanelSettings LoadOrCreatePanelSettings()
     {
         // Prefer a hand-tuned PanelSettings asset if one is ever added at this path; otherwise
-        // fall back to sane runtime defaults. ConstantPixelSize maps 1 USS px to 1 screen px
-        // regardless of the actual Game View / device resolution, so text renders at the exact
-        // sizes authored in CategorySelect.uss instead of being scaled against an assumed
-        // reference resolution that may not match the current window.
+        // fall back to sane runtime defaults for this project's target phone resolution
+        // (1440x3200 portrait). ScaleWithScreenSize keeps the authored CategorySelect.uss px
+        // sizes correct on the actual target device while still adapting proportionally to
+        // whatever size the Editor Game View happens to be.
         PanelSettings existing = Resources.Load<PanelSettings>(PanelSettingsResourcePath);
         if (existing != null)
         {
@@ -71,7 +71,10 @@ public static class CategorySelectBootstrapper
         }
 
         var settings = ScriptableObject.CreateInstance<PanelSettings>();
-        settings.scaleMode = PanelScaleMode.ConstantPixelSize;
+        settings.scaleMode = PanelScaleMode.ScaleWithScreenSize;
+        settings.referenceResolution = new Vector2Int(1440, 3200);
+        settings.screenMatchMode = PanelScreenMatchMode.MatchWidthOrHeight;
+        settings.match = 0.5f;
 
         // Every element we use in CategorySelect.uss sets its own explicit colors, so this
         // screen renders fine without a theme. Without one, Unity logs a benign
