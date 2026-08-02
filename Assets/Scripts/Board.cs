@@ -115,7 +115,18 @@ public class Board : MonoBehaviour
         solutions = textFile.text.Split('\n');
 
         textFile = Resources.Load<TextAsset>(validWordsPath);
-        validWords = new HashSet<string>(textFile.text.Split('\n'));
+        validWords = new HashSet<string>();
+        foreach (string line in textFile.text.Split('\n'))
+        {
+            // Some word list files (e.g. official_wordle_all.txt) use Windows-style CRLF line
+            // endings; splitting on '\n' alone leaves a trailing '\r' on every line except the
+            // last, which would silently fail every guess-validity Contains() check below.
+            string trimmed = line.ToLower().Trim();
+            if (trimmed.Length > 0)
+            {
+                validWords.Add(trimmed);
+            }
+        }
 
         // Themed categories share the big classic dictionaries as their valid-guess list, so
         // make sure every one of this category's own solution words is guessable too, even if
