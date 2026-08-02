@@ -1,19 +1,17 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 /// <summary>
-/// Drives the UI Toolkit Category Select screen (CategorySelect.uxml/.uss). Attach to a
-/// GameObject that also has a UIDocument component pointing at that UXML, with a PanelSettings
-/// asset assigned (Create > UI Toolkit > Panel Settings Asset in the Unity 6 Editor).
-/// Lists every WordCategory for the selected word length and starts the matching game scene
-/// via GameManager.SelectCategoryAndPlay when the player taps one.
+/// Drives the UI Toolkit Category Select screen (CategorySelect.uxml/.uss). Normally you don't
+/// add this manually - CategorySelectBootstrapper creates it automatically when the "Menu" scene
+/// loads. Lists every WordCategory for the selected word length and, when the player taps one,
+/// records the choice and loads the matching game scene directly (no GameManager reference
+/// needed, so this works whether or not the current scene happens to have one).
 /// </summary>
 [RequireComponent(typeof(UIDocument))]
 public class CategorySelectUIController : MonoBehaviour
 {
-    [SerializeField] private GameManager gameManager;
-    [SerializeField] private string menuSceneName = "Menu";
-
     private VisualElement _categoryList;
     private Button _tabFive;
     private Button _tabSix;
@@ -73,20 +71,14 @@ public class CategorySelectUIController : MonoBehaviour
 
     private void OnCategoryChosen(WordCategory category)
     {
-        if (gameManager == null)
-        {
-            Debug.LogError("CategorySelectUIController: GameManager reference is not assigned.");
-            return;
-        }
-
-        gameManager.SelectCategoryAndPlay(category.id);
+        CategorySelectionService.SelectCategory(category.id);
+        SceneManager.LoadScene(category.wordLength == 6 ? "SixLetterWordle" : "FiveLetterWordle");
     }
 
     private void OnBackClicked()
     {
-        if (gameManager != null)
-        {
-            UnityEngine.SceneManagement.SceneManager.LoadScene(menuSceneName);
-        }
+        // The Menu scene's own content (e.g. leaderboard) sits underneath this UI; hiding it
+        // just reveals whatever was already there instead of reloading the scene.
+        gameObject.SetActive(false);
     }
 }
