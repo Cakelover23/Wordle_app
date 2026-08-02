@@ -16,6 +16,7 @@ public static class CategorySelectBootstrapper
 {
     private const string TargetSceneName = "Menu";
     private const string PanelSettingsResourcePath = "UI/CategorySelect/CategorySelectPanelSettings";
+    private const string ThemeResourcePath = "UI/CategorySelect/CategorySelectTheme";
     private const string VisualTreeResourcePath = "UI/CategorySelect/CategorySelect";
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
@@ -72,6 +73,19 @@ public static class CategorySelectBootstrapper
         settings.referenceResolution = new Vector2Int(1080, 1920);
         settings.screenMatchMode = PanelScreenMatchMode.MatchWidthOrHeight;
         settings.match = 0.5f;
+
+        // Every element we use in CategorySelect.uss sets its own explicit colors, so this
+        // screen renders fine without a theme. Without one, Unity logs a benign
+        // "No Theme Style Sheet set" warning; to silence it, create Assets > Create > UI Toolkit
+        // > Default Runtime Theme in the Editor and save it as a ThemeStyleSheet at
+        // Assets/Resources/UI/CategorySelect/CategorySelectTheme.tss - it will be picked up here
+        // automatically.
+        var theme = Resources.Load<ThemeStyleSheet>(ThemeResourcePath);
+        if (theme != null)
+        {
+            settings.themeStyleSheet = theme;
+        }
+
         return settings;
     }
 }

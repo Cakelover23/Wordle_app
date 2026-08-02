@@ -41,6 +41,12 @@ public class LeaderBoardManager : MonoBehaviour
 
         await SignInAnonymously();
 
+        if (stats == null)
+        {
+            Debug.LogWarning("LeaderBoardManager: 'stats' reference is not assigned in the Inspector - skipping player name sync. Assign the Stats component on this GameObject (or scene) to fix.");
+            return;
+        }
+
         _userId = stats._username;
         await AuthenticationService.Instance.UpdatePlayerNameAsync(_userId);
         
