@@ -1,32 +1,33 @@
 .category-select-root {
     flex: 1;
-    padding: 24px;
+    padding: 72px;
     background-color: rgb(24, 24, 28);
     align-items: stretch;
 }
 
 .title {
-    font-size: 28px;
+    font-size: 84px;
     -unity-font-style: bold;
     color: rgb(240, 240, 240);
     -unity-text-align: upper-center;
-    margin-bottom: 16px;
+    margin-bottom: 48px;
 }
 
 .length-tabs {
     flex-direction: row;
     justify-content: center;
-    margin-bottom: 12px;
+    margin-bottom: 36px;
 }
 
 .tab-button {
     flex-grow: 1;
-    margin: 0 4px;
-    padding: 10px;
+    margin: 0 12px;
+    padding: 30px;
+    font-size: 42px;
     background-color: rgb(45, 45, 52);
     color: rgb(200, 200, 200);
     border-width: 0;
-    border-radius: 8px;
+    border-radius: 20px;
 }
 
 .tab-button--active {
@@ -44,9 +45,9 @@
 
 .category-card {
     background-color: rgb(45, 45, 52);
-    border-radius: 10px;
-    padding: 14px;
-    margin-bottom: 10px;
+    border-radius: 20px;
+    padding: 42px;
+    margin-bottom: 30px;
 }
 
 .category-card:hover {
@@ -58,23 +59,24 @@
 }
 
 .category-card__name {
-    font-size: 18px;
+    font-size: 54px;
     -unity-font-style: bold;
     color: rgb(240, 240, 240);
 }
 
 .category-card__description {
-    font-size: 13px;
+    font-size: 39px;
     color: rgb(190, 190, 190);
-    margin-top: 4px;
+    margin-top: 12px;
     white-space: normal;
 }
 
 .back-button {
-    margin-top: 16px;
-    padding: 10px;
+    margin-top: 48px;
+    padding: 30px;
+    font-size: 42px;
     background-color: rgb(60, 60, 68);
     color: rgb(230, 230, 230);
     border-width: 0;
-    border-radius: 8px;
+    border-radius: 20px;
 }

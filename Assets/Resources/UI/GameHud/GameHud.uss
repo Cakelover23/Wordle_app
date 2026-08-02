@@ -8,19 +8,19 @@
 
 .top-bar {
     position: absolute;
-    top: 16px;
-    right: 16px;
+    top: 48px;
+    right: 48px;
     flex-direction: row;
 }
 
 .chrome-button {
-    margin-left: 6px;
-    padding: 6px 12px;
+    margin-left: 18px;
+    padding: 18px 36px;
     background-color: rgba(30, 30, 36, 0.85);
     color: rgb(230, 230, 230);
     border-width: 0;
-    border-radius: 6px;
-    font-size: 12px;
+    border-radius: 16px;
+    font-size: 36px;
 }
 
 .modal-backdrop {
@@ -39,52 +39,53 @@
 }
 
 .modal-card {
-    width: 320px;
+    width: 900px;
     max-width: 85%;
     background-color: rgb(38, 38, 44);
-    border-radius: 12px;
-    padding: 20px;
+    border-radius: 30px;
+    padding: 60px;
     align-items: stretch;
 }
 
 .modal-title {
-    font-size: 22px;
+    font-size: 66px;
     -unity-font-style: bold;
     color: rgb(240, 240, 240);
     -unity-text-align: upper-center;
-    margin-bottom: 14px;
+    margin-bottom: 42px;
 }
 
 .modal-button {
-    margin-top: 14px;
-    padding: 10px;
+    margin-top: 42px;
+    padding: 30px;
+    font-size: 36px;
     background-color: rgb(83, 141, 78);
     color: rgb(255, 255, 255);
     border-width: 0;
-    border-radius: 8px;
+    border-radius: 20px;
 }
 
 .stats-row {
     flex-direction: row;
     justify-content: space-between;
-    padding: 6px 2px;
+    padding: 18px 6px;
     border-bottom-width: 1px;
     border-bottom-color: rgba(255, 255, 255, 0.08);
 }
 
 .stats-label {
     color: rgb(190, 190, 190);
-    font-size: 14px;
+    font-size: 42px;
 }
 
 .stats-value {
     color: rgb(240, 240, 240);
-    font-size: 14px;
+    font-size: 42px;
     -unity-font-style: bold;
 }
 
 .leaderboard-scroll {
-    max-height: 320px;
+    max-height: 900px;
 }
 
 .leaderboard-list {
@@ -94,27 +95,31 @@
 .leaderboard-row {
     flex-direction: row;
     justify-content: space-between;
-    padding: 8px;
-    margin-bottom: 4px;
+    padding: 24px;
+    margin-bottom: 12px;
     background-color: rgb(48, 48, 55);
-    border-radius: 6px;
+    border-radius: 16px;
 }
 
 .leaderboard-rank {
-    width: 32px;
+    width: 90px;
     color: rgb(190, 190, 190);
+    font-size: 36px;
 }
 
 .leaderboard-name {
     flex-grow: 1;
     color: rgb(240, 240, 240);
+    font-size: 36px;
 }
 
 .leaderboard-score {
     color: rgb(240, 240, 240);
+    font-size: 36px;
     -unity-font-style: bold;
 }
 
 .username-field {
-    margin-bottom: 4px;
+    margin-bottom: 12px;
+    font-size: 36px;
 }
