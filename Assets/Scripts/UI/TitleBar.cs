@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,8 +19,8 @@ public class TitleBar : MonoBehaviour
     [SerializeField] private Color[] barColours = new Color[3];
 
     // Cached once in Awake so LateUpdate (see below) doesn't need to re-run GetComponentInChildren
-    // every single frame.
-    private readonly Text[] _barTextComponents = new Text[3];
+    // every single frame. The boxes use TextMeshPro labels (TMP_Text), not legacy UI.Text.
+    private readonly TMP_Text[] _barTextComponents = new TMP_Text[3];
     private readonly Image[] _barImageComponents = new Image[3];
     private bool _themeApplied;
 
@@ -37,7 +38,7 @@ public class TitleBar : MonoBehaviour
             return;
         }
 
-        _barTextComponents[index] = bar.GetComponentInChildren<Text>(true);
+        _barTextComponents[index] = bar.GetComponentInChildren<TMP_Text>(true);
         _barImageComponents[index] = bar.GetComponentInChildren<Image>(true);
     }
 
@@ -96,7 +97,7 @@ public class TitleBar : MonoBehaviour
 
     private void ApplyBar(int index)
     {
-        Text textComponent = _barTextComponents[index];
+        TMP_Text textComponent = _barTextComponents[index];
         if (textComponent != null)
         {
             textComponent.text = barTexts[index];
