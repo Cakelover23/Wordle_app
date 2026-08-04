@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 using System.Collections.Generic;
 using Unity.IO.LowLevel.Unsafe;
 
@@ -21,6 +22,11 @@ public class Board : MonoBehaviour
     /// <summary>Read-only access to this board's rows/tiles, for external renderers
     /// (e.g. BoardUIToolkitController) that need to mirror tile state without owning game logic.</summary>
     public Row[] Rows => rows;
+
+    /// <summary>Raised whenever a keyboard letter's color changes (correct/wrong-spot/incorrect/
+    /// reset to default), so an external renderer (e.g. KeyboardUIToolkitController) can mirror
+    /// on-screen keyboard state without duplicating Board's guess-checking logic.</summary>
+    public event Action<char, Color> LetterKeyColorChanged;
 
     protected string[] solutions;
     protected HashSet<string> validWords;
@@ -153,6 +159,66 @@ public class Board : MonoBehaviour
         GameManager.GameEvents.GameStart.TriggerEvent();
         ResetAllLetterButtons();
         enabled = true;
+    }
+
+    /// <summary>Letters this board has an on-screen keyboard key for, in the same casing used by
+    /// the legacy keyboard buttons (matches the labels' text, e.g. uppercase 'Q').</summary>
+    public IEnumerable<char> KeyboardLetters => letterButtonMap.Keys;
+
+    /// <summary>Current display color for a keyboard letter key (default/correct/wrong-spot/
+    /// incorrect), for external renderers to initialize from before subscribing to
+    /// <see cref="LetterKeyColorChanged"/>.</summary>
+    public Color GetKeyColor(char letter)
+    {
+        return letterButtonMap.TryGetValue(letter, out Button button) ? button.colors.normalColor : defaultColor;
+    }
+
+    /// <summary>Forwards a letter key press to the same logic the legacy on-screen keyboard
+    /// button uses, for an external UI Toolkit keyboard renderer to call.</summary>
+    public void PressLetterKey(char letter) => OnLetterButtonClick(letter);
+
+    /// <summary>Forwards a backspace key press to the same logic the legacy backspace button
+    /// uses, for an external UI Toolkit keyboard renderer to call.</summary>
+    public void PressBackspaceKey() => OnBackspaceButtonClick();
+
+    /// <summary>Forwards an enter key press to the same logic the legacy enter button uses, for
+    /// an external UI Toolkit keyboard renderer to call.</summary>
+    public void PressEnterKey() => OnEnterButtonClick();
+
+    /// <summary>
+    /// Hides the legacy on-screen keyboard's rendering (button backgrounds/labels) without
+    /// disabling the GameObjects, so Board's game logic (letterButtonMap, click handlers) keeps
+    /// working untouched while a UI Toolkit keyboard (KeyboardUIToolkitController) renders in
+    /// its place.
+    /// </summary>
+    public void HideLegacyKeyboardVisuals()
+    {
+        foreach (Button button in letterButtons)
+        {
+            HideButtonVisual(button);
+        }
+        HideButtonVisual(backspaceButton);
+        HideButtonVisual(enterButton);
+    }
+
+    private static void HideButtonVisual(Button button)
+    {
+        if (button == null)
+        {
+            return;
+        }
+
+        Image image = button.GetComponent<Image>();
+        if (image != null)
+        {
+            image.enabled = false;
+        }
+
+        TMP_Text text = button.GetComponentInChildren<TMP_Text>();
+        if (text != null)
+        {
+            text.enabled = false;
+        }
     }
 
     public void TryAgain()
@@ -364,6 +430,7 @@ public class Board : MonoBehaviour
             ColorBlock colors = letterButtonMap[letter].colors;
             colors.normalColor = incorrectColor;
             letterButtonMap[letter].colors = colors;
+            LetterKeyColorChanged?.Invoke(letter, incorrectColor);
         }
     }
 
@@ -374,6 +441,7 @@ public class Board : MonoBehaviour
             ColorBlock colors = letterButtonMap[letter].colors;
             colors.normalColor = correctColor;
             letterButtonMap[letter].colors = colors;
+            LetterKeyColorChanged?.Invoke(letter, correctColor);
         }
     }
 
@@ -386,17 +454,19 @@ public class Board : MonoBehaviour
                 ColorBlock colors = letterButtonMap[letter].colors;
                 colors.normalColor = wrongSpotColor;
                 letterButtonMap[letter].colors = colors;
+                LetterKeyColorChanged?.Invoke(letter, wrongSpotColor);
             }
         }
     }
 
     private void ResetAllLetterButtons()
     {
-        foreach (Button button in letterButtons)
+        foreach (KeyValuePair<char, Button> entry in letterButtonMap)
         {
-            ColorBlock colors = button.colors;
+            ColorBlock colors = entry.Value.colors;
             colors.normalColor = defaultColor;
-            button.colors = colors;
+            entry.Value.colors = colors;
+            LetterKeyColorChanged?.Invoke(entry.Key, defaultColor);
         }
     }
 }

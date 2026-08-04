@@ -1,0 +1,48 @@
+.keyboard-root {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    align-items: center;
+    justify-content: flex-end;
+    padding-bottom: 60px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.keyboard-rows {
+    flex-direction: column;
+    align-items: center;
+}
+
+.keyboard-row {
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+
+.keyboard-key {
+    width: 132px;
+    height: 168px;
+    margin-left: 4px;
+    margin-right: 4px;
+    border-radius: 10px;
+    background-color: rgb(129, 131, 132);
+    align-items: center;
+    justify-content: center;
+}
+
+.keyboard-key--wide {
+    width: 198px;
+}
+
+.keyboard-key__label {
+    font-size: 48px;
+    -unity-font-style: bold;
+    color: rgb(255, 255, 255);
+    -unity-text-align: middle-center;
+}
+
+.keyboard-key__label--small {
+    font-size: 36px;
+}

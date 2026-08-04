@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:Style src="Keyboard.uss" />
+    <ui:VisualElement name="keyboard-root" class="keyboard-root" picking-mode="Ignore">
+        <ui:VisualElement name="keyboard-rows" class="keyboard-rows" picking-mode="Ignore" />
+    </ui:VisualElement>
+</ui:UXML>
