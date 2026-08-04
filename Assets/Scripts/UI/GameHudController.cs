@@ -64,6 +64,8 @@ public class GameHudController : MonoBehaviour
         root.Q<Button>("leaderboard-close-button").clicked += () => Hide(_leaderboardPanel);
         root.Q<Button>("username-submit-button").clicked += SubmitUsername;
 
+        ThemeService.ApplyAccent(root, "modal-button");
+
         LinkLegacyReferences();
         GameManager.GameEvents.GameStart.onGameEvent += UIGameStart;
         GameManager.GameEvents.GameEnd.onGameEvent += UIGameEnd;

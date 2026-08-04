@@ -35,6 +35,39 @@
     color: rgb(255, 255, 255);
 }
 
+.theme-row {
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 36px;
+}
+
+.theme-row__label {
+    font-size: 39px;
+    color: rgb(200, 200, 200);
+    margin-right: 24px;
+}
+
+.theme-swatches {
+    flex-direction: row;
+    flex-wrap: wrap;
+    flex-grow: 1;
+}
+
+.theme-swatch {
+    width: 72px;
+    height: 72px;
+    border-radius: 36px;
+    margin-right: 18px;
+    margin-bottom: 12px;
+    border-width: 4px;
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.theme-swatch--selected {
+    border-color: rgb(255, 255, 255);
+    border-width: 6px;
+}
+
 .category-scroll {
     flex: 1;
 }

@@ -59,8 +59,57 @@ public class Board : MonoBehaviour
     // Dictionary to map letters to their corresponding buttons
     private Dictionary<char, Button> letterButtonMap;
 
+    /// <summary>
+    /// Overwrites this board's tile/keyboard colors with the player's selected theme (see
+    /// ThemeService). Runs at the very start of Awake() - before letterButtonMap is built and
+    /// before NewGame() colors any tiles - so every subsequent color read (both here and by
+    /// BoardUIToolkitController/KeyboardUIToolkitController, which read these fields live) already
+    /// reflects the theme with no race against scene-load bootstrappers. When the player has the
+    /// "Original" theme selected this is a no-op, so nothing changes from before this feature
+    /// existed.
+    /// </summary>
+    private void ApplyTheme()
+    {
+        if (ThemeService.IsOriginal)
+        {
+            return;
+        }
+
+        GameTheme theme = ThemeService.Current;
+
+        correctState.fillColor = theme.correct;
+        wrongSpotState.fillColor = theme.wrongSpot;
+        incorrectState.fillColor = theme.incorrect;
+        emptyState.fillColor = theme.tileEmpty;
+        occupiedState.fillColor = theme.tileOccupied;
+
+        correctColor = theme.correct;
+        wrongSpotColor = theme.wrongSpot;
+        incorrectColor = theme.incorrect;
+        defaultColor = theme.keyDefault;
+
+        // Legacy uGUI buttons carry their own idle color in a ColorBlock rather than reading
+        // defaultColor directly, so give each key button the themed default too.
+        if (letterButtons != null)
+        {
+            foreach (Button button in letterButtons)
+            {
+                if (button == null)
+                {
+                    continue;
+                }
+
+                ColorBlock colors = button.colors;
+                colors.normalColor = theme.keyDefault;
+                button.colors = colors;
+            }
+        }
+    }
+
     private void Awake()
     {
+        ApplyTheme();
+
         rows = GetComponentsInChildren<Row>();
 
         // Initialize the dictionary
