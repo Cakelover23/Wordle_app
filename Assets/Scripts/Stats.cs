@@ -29,6 +29,14 @@ public class Stats : MonoBehaviour
     private const string TotalLossesKey = "TotalLosses";
     private const string TotalGuessKey = "TotalGuesses";
 
+    private void Awake()
+    {
+        // Load the persisted username as early as possible (Awake runs before any other
+        // component's Start/OnEnable reads Stats.HasUsername), so nothing can race ahead of
+        // PlayerPrefs and mistakenly re-show the username prompt.
+        _username = PlayerPrefs.GetString(UsernameKey);
+    }
+
     private void Start()
     {
         LoadStats();
@@ -45,23 +53,20 @@ public class Stats : MonoBehaviour
     }
     private void SetupUsername()
     {
-       if (string.IsNullOrEmpty(PlayerPrefs.GetString(UsernameKey)))
+       if (string.IsNullOrEmpty(_username))
        {
             UsernameInput.SetActive(true);
             UIManager.UsernameBeingInput();
 
        }
-        else
-        {
-            _username = PlayerPrefs.GetString(UsernameKey);
-        }
         
         Debug.Log("Username is: " + _username);
     }
     public void SubmitUsername()
     {
         _username = UsernameInput.GetComponentInChildren<InputField>().text;
-        PlayerPrefs.SetString("Username", _username);
+        PlayerPrefs.SetString(UsernameKey, _username);
+        PlayerPrefs.Save();
         UsernameInput.SetActive(false);
         UIManager.UsernameSubmitted();
     }

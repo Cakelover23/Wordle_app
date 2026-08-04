@@ -25,6 +25,7 @@ public class LeaderBoardManager : MonoBehaviour
     
     private string _userId;
     const string LeaderboardId = "CurrentStreak";
+    const string SyncedUsernameKey = "SyncedLeaderboardUsername";
 
     string VersionId { get; set; }
     int Offset { get; set; }
@@ -47,14 +48,50 @@ public class LeaderBoardManager : MonoBehaviour
             return;
         }
 
+        await SyncPlayerNameIfNeeded();
+    }
+
+    /// <summary>
+    /// Only calls UpdatePlayerNameAsync when the local username has actually changed since the
+    /// last successful sync (tracked via PlayerPrefs). Without this guard, every game scene load
+    /// re-sends the same name to Unity Authentication, which is unnecessary and was the source of
+    /// intermittent "name already set"/conflict errors the player saw every so often.
+    /// </summary>
+    private async Task SyncPlayerNameIfNeeded()
+    {
         _userId = stats._username;
-        await AuthenticationService.Instance.UpdatePlayerNameAsync(_userId);
-        
+        if (string.IsNullOrWhiteSpace(_userId))
+        {
+            return;
+        }
+
+        if (PlayerPrefs.GetString(SyncedUsernameKey) == _userId)
+        {
+            return; // Already synced this exact name - nothing to do.
+        }
+
+        try
+        {
+            await AuthenticationService.Instance.UpdatePlayerNameAsync(_userId);
+            PlayerPrefs.SetString(SyncedUsernameKey, _userId);
+            PlayerPrefs.Save();
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"LeaderBoardManager: failed to sync player name '{_userId}': {e.Message}");
+        }
     }
 
 
     async Task SignInAnonymously()
     {
+        if (AuthenticationService.Instance.IsSignedIn)
+        {
+            // Already signed in from a previous scene load this session - calling
+            // SignInAnonymouslyAsync() again is unnecessary and can throw.
+            return;
+        }
+
         AuthenticationService.Instance.SignedIn += () =>
         {
             Debug.Log("Signed in as: " + AuthenticationService.Instance.PlayerId);
@@ -65,8 +102,16 @@ public class LeaderBoardManager : MonoBehaviour
             Debug.Log(s);
         };
 
-        await AuthenticationService.Instance.SignInAnonymouslyAsync();
+        try
+        {
+            await AuthenticationService.Instance.SignInAnonymouslyAsync();
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"LeaderBoardManager: sign-in failed: {e.Message}");
+        }
     }
+
 
    public async Task GetScores()
     {
