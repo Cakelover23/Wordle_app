@@ -34,6 +34,7 @@ public class BoardUIToolkitController : MonoBehaviour
         {
             var rowElement = new VisualElement();
             rowElement.AddToClassList("board-row");
+            rowElement.pickingMode = PickingMode.Ignore; // purely visual, must not block clicks to legacy UI below
             grid.Add(rowElement);
 
             foreach (Tile tile in row.tiles)
@@ -55,9 +56,11 @@ public class BoardUIToolkitController : MonoBehaviour
     {
         var tileElement = new VisualElement();
         tileElement.AddToClassList("board-tile");
+        tileElement.pickingMode = PickingMode.Ignore; // purely visual, must not block clicks to legacy UI below
 
         var label = new Label();
         label.AddToClassList("board-tile__label");
+        label.pickingMode = PickingMode.Ignore;
         tileElement.Add(label);
         rowElement.Add(tileElement);
 
