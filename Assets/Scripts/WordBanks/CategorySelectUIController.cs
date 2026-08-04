@@ -59,6 +59,24 @@ public class CategorySelectUIController : MonoBehaviour
         {
             _usernamePanel.RemoveFromClassList("hidden");
         }
+
+        // Stay hidden behind the title screen until its open animation finishes -
+        // TitleScreenController raises MainMenuRevealGate.Revealed once that happens. If no
+        // title screen exists in the scene at all, nothing will ever call Reveal() and this
+        // screen simply won't appear - that's an intentional trade-off for keeping the two
+        // scripts fully decoupled.
+        _root.style.display = DisplayStyle.None;
+        MainMenuRevealGate.Revealed += OnRevealed;
+    }
+
+    private void OnDisable()
+    {
+        MainMenuRevealGate.Revealed -= OnRevealed;
+    }
+
+    private void OnRevealed()
+    {
+        _root.style.display = DisplayStyle.Flex;
     }
 
     private void OnUsernameSubmitted()
