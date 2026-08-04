@@ -22,7 +22,7 @@ public class KeyboardUIToolkitController : MonoBehaviour
     private static readonly string[] Row3 = { "ENTER", "Z", "X", "C", "V", "B", "N", "M", "BACK" };
 
     private Board board;
-    private readonly Dictionary<char, UnityEngine.UIElements.Button> _keyElements = new Dictionary<char, UnityEngine.UIElements.Button>();
+    private readonly Dictionary<char, (UnityEngine.UIElements.Button button, Label label)> _keyElements = new Dictionary<char, (UnityEngine.UIElements.Button, Label)>();
 
     private void OnEnable()
     {
@@ -95,9 +95,10 @@ public class KeyboardUIToolkitController : MonoBehaviour
                 break;
             default:
                 char letter = key[0];
-                button.clicked += () => board.PressLetterKey(letter);
-                ApplyColor(button, board.GetKeyColor(letter));
-                _keyElements[letter] = button;
+                char lowerLetter = char.ToLowerInvariant(letter);
+                button.clicked += () => board.PressLetterKey(lowerLetter);
+                ApplyColor(button, label, board.GetKeyColor(letter));
+                _keyElements[letter] = (button, label);
                 break;
         }
 
@@ -106,14 +107,20 @@ public class KeyboardUIToolkitController : MonoBehaviour
 
     private void OnLetterKeyColorChanged(char letter, Color color)
     {
-        if (_keyElements.TryGetValue(letter, out UnityEngine.UIElements.Button button))
+        if (_keyElements.TryGetValue(letter, out (UnityEngine.UIElements.Button button, Label label) entry))
         {
-            ApplyColor(button, color);
+            ApplyColor(entry.button, entry.label, color);
         }
     }
 
-    private static void ApplyColor(VisualElement element, Color color)
+    private static void ApplyColor(VisualElement element, Label label, Color color)
     {
         element.style.backgroundColor = new StyleColor(color);
+
+        // Pick readable text color based on the key's background brightness (perceived
+        // luminance) instead of always using white, since default/unrevealed keys are often a
+        // light gray where white text is hard to read.
+        float luminance = color.r * 0.299f + color.g * 0.587f + color.b * 0.114f;
+        label.style.color = new StyleColor(luminance > 0.6f ? new Color(0.1f, 0.1f, 0.1f) : Color.white);
     }
 }
