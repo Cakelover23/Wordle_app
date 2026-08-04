@@ -41,9 +41,8 @@ public class TitleBar : MonoBehaviour
         _barTextComponents[index] = bar.GetComponentInChildren<TMP_Text>(true);
         _barImageComponents[index] = bar.GetComponentInChildren<Image>(true);
 
-        // The hex code labels are always white; on light theme colors (e.g. cream/tan boxes)
-        // plain white text has poor contrast. A dark drop shadow behind the text keeps it
-        // readable on any background color without needing per-theme text-color logic.
+        // A dark drop shadow behind the text adds contrast against any background color,
+        // on top of the luminance-based text color swap in ApplyBar below.
         TMP_Text textComponent = _barTextComponents[index];
         if (textComponent != null)
         {
@@ -118,6 +117,7 @@ public class TitleBar : MonoBehaviour
         if (textComponent != null)
         {
             textComponent.text = barTexts[index];
+            textComponent.color = GetContrastingTextColor(barColours[index]);
         }
 
         Image imageComponent = _barImageComponents[index];
@@ -125,6 +125,16 @@ public class TitleBar : MonoBehaviour
         {
             imageComponent.color = barColours[index];
         }
+    }
+
+    /// <summary>
+    /// Same luminance formula CategorySelectUIController uses for its card labels: light
+    /// backgrounds (e.g. the cream/tan box) get dark text, everything else keeps white text.
+    /// </summary>
+    private static Color GetContrastingTextColor(Color background)
+    {
+        float luminance = background.r * 0.299f + background.g * 0.587f + background.b * 0.114f;
+        return luminance > 0.6f ? new Color(0.1f, 0.1f, 0.1f) : Color.white;
     }
 
     /// <summary>
