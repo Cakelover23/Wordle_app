@@ -19,7 +19,7 @@
     background-color: rgba(30, 30, 36, 0.85);
     color: rgb(230, 230, 230);
     border-width: 0;
-    border-radius: 18px;
+    border-radius: 24px;
     font-size: 44px;
 }
 
@@ -62,7 +62,7 @@
     background-color: rgb(83, 141, 78);
     color: rgb(255, 255, 255);
     border-width: 0;
-    border-radius: 20px;
+    border-radius: 26px;
 }
 
 .stats-row {

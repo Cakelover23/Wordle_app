@@ -14,6 +14,7 @@ public class CategorySelectUIController : MonoBehaviour
 {
     private VisualElement _categoryList;
     private VisualElement _themeSwatches;
+    private VisualElement _root;
     private Button _tabFive;
     private Button _tabSix;
     private int _selectedWordLength = 5;
@@ -26,6 +27,7 @@ public class CategorySelectUIController : MonoBehaviour
         UIDocument document = GetComponent<UIDocument>();
         VisualElement root = document.rootVisualElement;
 
+        _root = root.Q<VisualElement>("root");
         _categoryList = root.Q<VisualElement>("category-list");
         _themeSwatches = root.Q<VisualElement>("theme-swatches");
         _tabFive = root.Q<Button>("tab-five-letter");
@@ -48,6 +50,7 @@ public class CategorySelectUIController : MonoBehaviour
         PopulateThemeSwatches();
         ShowWordLength(_selectedWordLength);
         ThemeService.ApplyAccent(root, "modal-button");
+        ApplyThemeBackground();
 
         // Very first launch only: the player has never chosen a username before, so ask for one
         // here on the Menu screen and never again - UsernameService persists it forever, and the
@@ -127,19 +130,35 @@ public class CategorySelectUIController : MonoBehaviour
         ThemeService.SelectedIndex = index;
         PopulateThemeSwatches();
         ApplyAccentToTabs();
+        ApplyThemeBackground();
+        PopulateCategoryList(_selectedWordLength);
+    }
+
+    /// <summary>
+    /// Tints the whole Menu screen's root background with the current theme's darkest tile color
+    /// (mirrors what BoardUIToolkitController does for the Game scene), so both screens share the
+    /// same dark poster-style backdrop. No-ops on "Original" so nothing changes by default.
+    /// </summary>
+    private void ApplyThemeBackground()
+    {
+        _root.style.backgroundColor = ThemeService.IsOriginal
+            ? new StyleColor(StyleKeyword.Null)
+            : new StyleColor(ThemeService.Current.tileEmpty);
     }
 
     private void PopulateCategoryList(int wordLength)
     {
         _categoryList.Clear();
 
+        int index = 0;
         foreach (WordCategory category in WordCategoryDatabase.GetByWordLength(wordLength))
         {
-            _categoryList.Add(BuildCategoryCard(category));
+            _categoryList.Add(BuildCategoryCard(category, index));
+            index++;
         }
     }
 
-    private VisualElement BuildCategoryCard(WordCategory category)
+    private VisualElement BuildCategoryCard(WordCategory category, int index)
     {
         var card = new VisualElement();
         card.AddToClassList("category-card");
@@ -152,8 +171,38 @@ public class CategorySelectUIController : MonoBehaviour
         description.AddToClassList("category-card__description");
         card.Add(description);
 
+        ApplyCardTheme(card, name, description, index);
+
         card.RegisterCallback<ClickEvent>(_ => OnCategoryChosen(category));
         return card;
+    }
+
+    /// <summary>
+    /// Cycles category card backgrounds through the theme's 3 "bright" colors (accent, correct,
+    /// wrongSpot) by index, mimicking the multi-color-block look of the retro poster references
+    /// instead of painting every card the same flat color. Text color is picked for readability
+    /// using the same luminance formula KeyboardUIToolkitController uses for its keys. No-ops on
+    /// "Original" so the default flat gray cards are left untouched.
+    /// </summary>
+    private static void ApplyCardTheme(VisualElement card, Label name, Label description, int index)
+    {
+        if (ThemeService.IsOriginal)
+        {
+            card.style.backgroundColor = StyleKeyword.Null;
+            name.style.color = StyleKeyword.Null;
+            description.style.color = StyleKeyword.Null;
+            return;
+        }
+
+        GameTheme theme = ThemeService.Current;
+        Color[] palette = { theme.accent, theme.correct, theme.wrongSpot };
+        Color background = palette[index % palette.Length];
+        card.style.backgroundColor = background;
+
+        float luminance = background.r * 0.299f + background.g * 0.587f + background.b * 0.114f;
+        Color textColor = luminance > 0.6f ? new Color(0.1f, 0.1f, 0.1f) : Color.white;
+        name.style.color = textColor;
+        description.style.color = textColor;
     }
 
     private void OnCategoryChosen(WordCategory category)

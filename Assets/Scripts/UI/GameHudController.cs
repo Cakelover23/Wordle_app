@@ -69,6 +69,7 @@ public class GameHudController : MonoBehaviour
         _newWordButton.clicked += StartNewWord;
 
         ThemeService.ApplyAccent(root, "modal-button");
+        ThemeService.ApplyAccent(root, "chrome-button");
 
         LinkLegacyReferences();
         GameManager.GameEvents.GameStart.onGameEvent += UIGameStart;

@@ -88,10 +88,12 @@ public class KeyboardUIToolkitController : MonoBehaviour
             case "ENTER":
                 button.AddToClassList("keyboard-key--wide");
                 button.clicked += () => board.PressEnterKey();
+                ApplyColor(button, label, board.defaultColor);
                 break;
             case "BACK":
                 button.AddToClassList("keyboard-key--wide");
                 button.clicked += () => board.PressBackspaceKey();
+                ApplyColor(button, label, board.defaultColor);
                 break;
             default:
                 char letter = key[0];

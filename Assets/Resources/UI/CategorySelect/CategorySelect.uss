@@ -82,7 +82,7 @@
 
 .category-card {
     background-color: rgb(45, 45, 52);
-    border-radius: 20px;
+    border-radius: 28px;
     padding: 42px;
     margin-bottom: 30px;
 }
@@ -153,7 +153,7 @@
     background-color: rgb(83, 141, 78);
     color: rgb(255, 255, 255);
     border-width: 0;
-    border-radius: 20px;
+    border-radius: 26px;
 }
 
 .username-field {

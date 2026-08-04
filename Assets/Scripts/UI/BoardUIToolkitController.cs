@@ -30,6 +30,8 @@ public class BoardUIToolkitController : MonoBehaviour
         grid.Clear();
         _boundTiles.Clear();
 
+        ApplyThemeBackground(root);
+
         foreach (Row row in board.Rows)
         {
             var rowElement = new VisualElement();
@@ -94,5 +96,24 @@ public class BoardUIToolkitController : MonoBehaviour
         element.style.borderBottomColor = new StyleColor(state.outlineColor);
         element.style.borderLeftColor = new StyleColor(state.outlineColor);
         element.style.borderRightColor = new StyleColor(state.outlineColor);
+    }
+
+    /// <summary>
+    /// Tints the full-screen "board-root" element (which sits behind the top bar, grid and
+    /// keyboard alike, since it now spans the whole panel) with the current theme's darkest tile
+    /// color, so the whole game scene's background matches the selected theme instead of staying
+    /// a flat neutral gray. No-ops on the "Original" theme so nothing changes by default.
+    /// </summary>
+    private static void ApplyThemeBackground(VisualElement root)
+    {
+        VisualElement boardRoot = root.Q<VisualElement>("board-root");
+        if (boardRoot == null)
+        {
+            return;
+        }
+
+        boardRoot.style.backgroundColor = ThemeService.IsOriginal
+            ? new StyleColor(StyleKeyword.Null)
+            : new StyleColor(ThemeService.Current.tileEmpty);
     }
 }

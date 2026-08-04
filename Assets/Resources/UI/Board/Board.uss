@@ -1,9 +1,11 @@
 .board-root {
     position: absolute;
     left: 0;
-    top: 220px;
+    top: 0;
     right: 0;
-    bottom: 700px;
+    bottom: 0;
+    padding-top: 170px;
+    padding-bottom: 700px;
     align-items: center;
     justify-content: center;
 }
@@ -15,16 +17,16 @@
 
 .board-row {
     flex-direction: row;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
 }
 
 .board-tile {
-    width: 180px;
-    height: 180px;
-    margin-left: 10px;
-    margin-right: 10px;
+    width: 208px;
+    height: 208px;
+    margin-left: 8px;
+    margin-right: 8px;
     border-width: 4px;
-    border-radius: 12px;
+    border-radius: 28px;
     background-color: rgb(30, 30, 34);
     border-color: rgb(58, 58, 66);
     align-items: center;
@@ -32,7 +34,7 @@
 }
 
 .board-tile__label {
-    font-size: 84px;
+    font-size: 96px;
     -unity-font-style: bold;
     color: rgb(240, 240, 240);
     -unity-text-align: middle-center;
