@@ -14,13 +14,13 @@
 }
 
 .chrome-button {
-    margin-left: 18px;
-    padding: 18px 36px;
+    margin-left: 22px;
+    padding: 24px 46px;
     background-color: rgba(30, 30, 36, 0.85);
     color: rgb(230, 230, 230);
     border-width: 0;
-    border-radius: 16px;
-    font-size: 36px;
+    border-radius: 18px;
+    font-size: 44px;
 }
 
 .modal-backdrop {
