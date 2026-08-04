@@ -22,7 +22,6 @@ public class Stats : MonoBehaviour
     public UIManager UIManager;
     
     
-    private const string UsernameKey = "Username";
     private const string TotalWinsKey = "TotalWins";
     private const string CurrentWinStreakKey = "CurrentWinStreak";
     private const string TotalGamesPlayedKey = "TotalGamesPlayed";
@@ -33,8 +32,10 @@ public class Stats : MonoBehaviour
     {
         // Load the persisted username as early as possible (Awake runs before any other
         // component's Start/OnEnable reads Stats.HasUsername), so nothing can race ahead of
-        // PlayerPrefs and mistakenly re-show the username prompt.
-        _username = PlayerPrefs.GetString(UsernameKey);
+        // PlayerPrefs and mistakenly re-show the username prompt. By the time the player
+        // reaches a game scene, the Menu screen's first-launch prompt (CategorySelectUIController)
+        // has normally already set this via UsernameService.
+        _username = UsernameService.Current;
     }
 
     private void Start()
@@ -65,8 +66,7 @@ public class Stats : MonoBehaviour
     public void SubmitUsername()
     {
         _username = UsernameInput.GetComponentInChildren<InputField>().text;
-        PlayerPrefs.SetString(UsernameKey, _username);
-        PlayerPrefs.Save();
+        UsernameService.Set(_username);
         UsernameInput.SetActive(false);
         UIManager.UsernameSubmitted();
     }
@@ -85,9 +85,8 @@ public class Stats : MonoBehaviour
             return;
         }
 
-        _username = username.Trim();
-        PlayerPrefs.SetString(UsernameKey, _username);
-        PlayerPrefs.Save();
+        UsernameService.Set(username);
+        _username = UsernameService.Current;
     }
 
     public void AddToLosses()

@@ -18,6 +18,9 @@ public class CategorySelectUIController : MonoBehaviour
     private Button _tabSix;
     private int _selectedWordLength = 5;
 
+    private VisualElement _usernamePanel;
+    private TextField _usernameField;
+
     private void OnEnable()
     {
         UIDocument document = GetComponent<UIDocument>();
@@ -29,6 +32,10 @@ public class CategorySelectUIController : MonoBehaviour
         _tabSix = root.Q<Button>("tab-six-letter");
         Button backButton = root.Q<Button>("back-button");
 
+        _usernamePanel = root.Q<VisualElement>("username-panel");
+        _usernameField = root.Q<TextField>("username-field");
+        Button usernameSubmitButton = root.Q<Button>("username-submit-button");
+
         // Temporarily disabled while the 6-letter game scene is being fixed up - remove this
         // line to bring the "6 Letters" tab back once that scene is confirmed working again.
         _tabSix.style.display = DisplayStyle.None;
@@ -36,9 +43,30 @@ public class CategorySelectUIController : MonoBehaviour
         _tabFive.clicked += () => ShowWordLength(5);
         _tabSix.clicked += () => ShowWordLength(6);
         backButton.clicked += OnBackClicked;
+        usernameSubmitButton.clicked += OnUsernameSubmitted;
 
         PopulateThemeSwatches();
         ShowWordLength(_selectedWordLength);
+        ThemeService.ApplyAccent(root, "modal-button");
+
+        // Very first launch only: the player has never chosen a username before, so ask for one
+        // here on the Menu screen and never again - UsernameService persists it forever, and the
+        // in-game Stats/LeaderBoardManager flow reads the same value.
+        if (!UsernameService.HasUsername)
+        {
+            _usernamePanel.RemoveFromClassList("hidden");
+        }
+    }
+
+    private void OnUsernameSubmitted()
+    {
+        if (string.IsNullOrWhiteSpace(_usernameField.value))
+        {
+            return;
+        }
+
+        UsernameService.Set(_usernameField.value);
+        _usernamePanel.AddToClassList("hidden");
     }
 
     private void ShowWordLength(int wordLength)

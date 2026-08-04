@@ -117,3 +117,46 @@
     border-width: 0;
     border-radius: 20px;
 }
+
+.modal-backdrop {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.55);
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-card {
+    width: 900px;
+    max-width: 85%;
+    background-color: rgb(38, 38, 44);
+    border-radius: 30px;
+    padding: 60px;
+    align-items: stretch;
+}
+
+.modal-title {
+    font-size: 66px;
+    -unity-font-style: bold;
+    color: rgb(240, 240, 240);
+    -unity-text-align: upper-center;
+    margin-bottom: 42px;
+}
+
+.modal-button {
+    margin-top: 42px;
+    padding: 30px;
+    font-size: 36px;
+    background-color: rgb(83, 141, 78);
+    color: rgb(255, 255, 255);
+    border-width: 0;
+    border-radius: 20px;
+}
+
+.username-field {
+    margin-bottom: 12px;
+    font-size: 36px;
+}

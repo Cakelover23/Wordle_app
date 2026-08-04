@@ -14,5 +14,12 @@
             <ui:VisualElement name="category-list" class="category-list"/>
         </ui:ScrollView>
         <ui:Button name="back-button" text="Back" class="back-button hidden"/>
+        <ui:VisualElement name="username-panel" class="modal-backdrop hidden">
+            <ui:VisualElement class="modal-card">
+                <ui:Label text="Choose a Username" class="modal-title"/>
+                <ui:TextField name="username-field" class="username-field"/>
+                <ui:Button name="username-submit-button" text="Submit" class="modal-button"/>
+            </ui:VisualElement>
+        </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>
