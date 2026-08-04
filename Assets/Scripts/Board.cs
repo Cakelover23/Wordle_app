@@ -236,7 +236,7 @@ public class Board : MonoBehaviour
 
     private void SetRandomWord()
     {
-        word = solutions[Random.Range(0, solutions.Length)].ToLower().Trim();
+        word = solutions[UnityEngine.Random.Range(0, solutions.Length)].ToLower().Trim();
         correctWordText.GetComponent<TMP_Text>().SetText(word);
         Debug.Log("New word set: " + word);
     }
