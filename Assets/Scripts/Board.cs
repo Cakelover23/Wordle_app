@@ -424,37 +424,43 @@ public class Board : MonoBehaviour
     private void DisableLetterButton(char letter)
     {
         Debug.Log($"Attempting to disable letter: {letter}");
-    
-        if (letterButtonMap.ContainsKey(letter) && letterButtonMap[letter].colors.normalColor != correctColor && letterButtonMap[letter].colors.normalColor != wrongSpotColor)
+
+        // letterButtonMap keys are uppercase (built from the legacy button labels), but tile.letter
+        // is always lowercase (physical typing and the UI Toolkit keyboard both pass lowercase),
+        // so normalize before looking it up or the keyboard color would silently never update.
+        char key = char.ToUpperInvariant(letter);
+        if (letterButtonMap.ContainsKey(key) && letterButtonMap[key].colors.normalColor != correctColor && letterButtonMap[key].colors.normalColor != wrongSpotColor)
         {
-            ColorBlock colors = letterButtonMap[letter].colors;
+            ColorBlock colors = letterButtonMap[key].colors;
             colors.normalColor = incorrectColor;
-            letterButtonMap[letter].colors = colors;
-            LetterKeyColorChanged?.Invoke(letter, incorrectColor);
+            letterButtonMap[key].colors = colors;
+            LetterKeyColorChanged?.Invoke(key, incorrectColor);
         }
     }
 
     private void CorrectLetterButton(char letter)
     {
-        if (letterButtonMap.ContainsKey(letter))
+        char key = char.ToUpperInvariant(letter);
+        if (letterButtonMap.ContainsKey(key))
         {
-            ColorBlock colors = letterButtonMap[letter].colors;
+            ColorBlock colors = letterButtonMap[key].colors;
             colors.normalColor = correctColor;
-            letterButtonMap[letter].colors = colors;
-            LetterKeyColorChanged?.Invoke(letter, correctColor);
+            letterButtonMap[key].colors = colors;
+            LetterKeyColorChanged?.Invoke(key, correctColor);
         }
     }
 
     private void WrongSpotLetterButton(char letter)
     {
-        if (letterButtonMap.ContainsKey(letter))
+        char key = char.ToUpperInvariant(letter);
+        if (letterButtonMap.ContainsKey(key))
         {
-            if(letterButtonMap[letter].colors.normalColor != correctColor)
+            if(letterButtonMap[key].colors.normalColor != correctColor)
             {
-                ColorBlock colors = letterButtonMap[letter].colors;
+                ColorBlock colors = letterButtonMap[key].colors;
                 colors.normalColor = wrongSpotColor;
-                letterButtonMap[letter].colors = colors;
-                LetterKeyColorChanged?.Invoke(letter, wrongSpotColor);
+                letterButtonMap[key].colors = colors;
+                LetterKeyColorChanged?.Invoke(key, wrongSpotColor);
             }
         }
     }
