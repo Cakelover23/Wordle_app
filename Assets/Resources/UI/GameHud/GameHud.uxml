@@ -4,7 +4,9 @@
 
         <ui:VisualElement name="top-bar" class="top-bar">
             <ui:Button name="menu-button" text="Menu" class="chrome-button" />
-            <ui:Button name="pause-button" text="Pause" class="chrome-button" />
+            <!-- Hidden: no in-game reason to pause. Underlying pause logic is left intact in
+                 GameHudController in case this is ever brought back. -->
+            <ui:Button name="pause-button" text="Pause" class="chrome-button hidden" />
             <ui:Button name="stats-button" text="Stats" class="chrome-button" />
             <ui:Button name="leaderboard-button" text="Ranks" class="chrome-button" />
         </ui:VisualElement>

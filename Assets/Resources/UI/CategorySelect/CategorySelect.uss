@@ -68,6 +68,10 @@
     border-width: 6px;
 }
 
+.hidden {
+    display: none;
+}
+
 .category-scroll {
     flex: 1;
 }

@@ -17,6 +17,6 @@
             <ui:VisualElement name="category-list" class="category-list" />
         </ui:ScrollView>
 
-        <ui:Button name="back-button" text="Back" class="back-button" />
+        <ui:Button name="back-button" text="Back" class="back-button hidden" />
     </ui:VisualElement>
 </ui:UXML>
