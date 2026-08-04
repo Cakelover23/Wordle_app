@@ -1,0 +1,30 @@
+json{
+  "friendlyName": "Google Pixel 8a",
+  "version": 1,
+  "Screens": [
+    {
+      "width": 1080,
+      "height": 2400,
+      "dpi": 422.0,
+      "orientation": "Portrait",
+      "presentation": {
+        "borderSize": [0, 0, 0, 0]
+      },
+      "cutouts": [
+        {
+          "type": "Ellipse",
+          "center": [540, 95],
+          "size": [40, 40]
+        }
+      ],
+      "safeArea": {
+        "x": 0,
+        "y": 140,
+        "width": 1080,
+        "height": 2260
+      }
+    }
+  ],
+  "SystemInfo": {
+    "operatingSystem": "Android"
+  }
