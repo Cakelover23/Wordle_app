@@ -97,8 +97,8 @@ public class KeyboardUIToolkitController : MonoBehaviour
                 char letter = key[0];
                 char lowerLetter = char.ToLowerInvariant(letter);
                 button.clicked += () => board.PressLetterKey(lowerLetter);
-                ApplyColor(button, label, board.GetKeyColor(letter));
-                _keyElements[letter] = (button, label);
+                ApplyColor(button, label, board.GetKeyColor(lowerLetter));
+                _keyElements[lowerLetter] = (button, label);
                 break;
         }
 
@@ -110,6 +110,10 @@ public class KeyboardUIToolkitController : MonoBehaviour
         if (_keyElements.TryGetValue(letter, out (UnityEngine.UIElements.Button button, Label label) entry))
         {
             ApplyColor(entry.button, entry.label, color);
+        }
+        else
+        {
+            Debug.LogWarning($"KeyboardUIToolkitController: received color change for '{letter}' but no matching key element was found.");
         }
     }
 

@@ -72,7 +72,12 @@ public class Board : MonoBehaviour
             TMP_Text buttonText = button.GetComponentInChildren<TMP_Text>();
             if (buttonText != null)
             {
-                char letter = buttonText.text[0];
+                // Some legacy button labels only look uppercase due to a "Character Casing"
+                // style override on the TMP component - the underlying text can actually be
+                // either case. Normalize to lowercase here so letterButtonMap's keys always
+                // match tile.letter's casing (always lowercase, from both physical-keyboard
+                // input and the UI Toolkit keyboard) without guessing which case is "real".
+                char letter = char.ToLowerInvariant(buttonText.text[0]);
                 letterButtonMap[letter] = button; // Map the letter to the button
                 button.onClick.AddListener(() => OnLetterButtonClick(letter));
             }
@@ -425,10 +430,10 @@ public class Board : MonoBehaviour
     {
         Debug.Log($"Attempting to disable letter: {letter}");
 
-        // letterButtonMap keys are uppercase (built from the legacy button labels), but tile.letter
-        // is always lowercase (physical typing and the UI Toolkit keyboard both pass lowercase),
-        // so normalize before looking it up or the keyboard color would silently never update.
-        char key = char.ToUpperInvariant(letter);
+        // letterButtonMap keys are lowercase (normalized in Awake), matching tile.letter's
+        // casing (always lowercase, from both physical-keyboard input and the UI Toolkit
+        // keyboard), so normalize here too in case a caller ever passes an uppercase letter.
+        char key = char.ToLowerInvariant(letter);
         if (letterButtonMap.ContainsKey(key) && letterButtonMap[key].colors.normalColor != correctColor && letterButtonMap[key].colors.normalColor != wrongSpotColor)
         {
             ColorBlock colors = letterButtonMap[key].colors;
@@ -440,7 +445,7 @@ public class Board : MonoBehaviour
 
     private void CorrectLetterButton(char letter)
     {
-        char key = char.ToUpperInvariant(letter);
+        char key = char.ToLowerInvariant(letter);
         if (letterButtonMap.ContainsKey(key))
         {
             ColorBlock colors = letterButtonMap[key].colors;
@@ -452,7 +457,7 @@ public class Board : MonoBehaviour
 
     private void WrongSpotLetterButton(char letter)
     {
-        char key = char.ToUpperInvariant(letter);
+        char key = char.ToLowerInvariant(letter);
         if (letterButtonMap.ContainsKey(key))
         {
             if(letterButtonMap[key].colors.normalColor != correctColor)
