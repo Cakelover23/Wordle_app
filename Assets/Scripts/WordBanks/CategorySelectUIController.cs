@@ -29,6 +29,10 @@ public class CategorySelectUIController : MonoBehaviour
         _tabSix = root.Q<Button>("tab-six-letter");
         Button backButton = root.Q<Button>("back-button");
 
+        // Temporarily disabled while the 6-letter game scene is being fixed up - remove this
+        // line to bring the "6 Letters" tab back once that scene is confirmed working again.
+        _tabSix.style.display = DisplayStyle.None;
+
         _tabFive.clicked += () => ShowWordLength(5);
         _tabSix.clicked += () => ShowWordLength(6);
         backButton.clicked += OnBackClicked;

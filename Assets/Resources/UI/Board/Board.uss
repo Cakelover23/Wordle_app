@@ -1,12 +1,11 @@
 .board-root {
     position: absolute;
     left: 0;
-    top: 0;
+    top: 220px;
     right: 0;
-    bottom: 0;
+    bottom: 700px;
     align-items: center;
-    justify-content: flex-start;
-    padding-top: 260px;
+    justify-content: center;
 }
 
 .board-grid {
