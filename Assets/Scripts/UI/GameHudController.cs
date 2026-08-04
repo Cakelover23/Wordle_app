@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 /// <summary>
@@ -56,6 +57,7 @@ public class GameHudController : MonoBehaviour
 
         _pauseButton.clicked += PauseGame;
         root.Q<Button>("resume-button").clicked += ResumeGame;
+        root.Q<Button>("menu-button").clicked += GoToMainMenu;
         statsButton.clicked += DisplayStats;
         root.Q<Button>("stats-close-button").clicked += () => Hide(_statsPanel);
         leaderboardButton.clicked += DisplayLeaderBoard;
@@ -139,6 +141,13 @@ public class GameHudController : MonoBehaviour
         SetKeyboardActive(true);
         Time.timeScale = 1;
         _pauseButton.SetEnabled(true);
+    }
+
+    private void GoToMainMenu()
+    {
+        // Restore normal time flow in case the game was paused, then leave this scene entirely.
+        Time.timeScale = 1;
+        SceneManager.LoadScene("Menu");
     }
 
     #endregion

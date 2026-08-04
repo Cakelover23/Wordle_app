@@ -3,6 +3,7 @@
     <ui:VisualElement name="hud-root" class="hud-root" picking-mode="Ignore">
 
         <ui:VisualElement name="top-bar" class="top-bar">
+            <ui:Button name="menu-button" text="Menu" class="chrome-button" />
             <ui:Button name="pause-button" text="Pause" class="chrome-button" />
             <ui:Button name="stats-button" text="Stats" class="chrome-button" />
             <ui:Button name="leaderboard-button" text="Ranks" class="chrome-button" />
