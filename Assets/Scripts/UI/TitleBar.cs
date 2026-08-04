@@ -40,6 +40,23 @@ public class TitleBar : MonoBehaviour
 
         _barTextComponents[index] = bar.GetComponentInChildren<TMP_Text>(true);
         _barImageComponents[index] = bar.GetComponentInChildren<Image>(true);
+
+        // The hex code labels are always white; on light theme colors (e.g. cream/tan boxes)
+        // plain white text has poor contrast. A dark drop shadow behind the text keeps it
+        // readable on any background color without needing per-theme text-color logic.
+        TMP_Text textComponent = _barTextComponents[index];
+        if (textComponent != null)
+        {
+            Shadow shadow = textComponent.GetComponent<Shadow>();
+            if (shadow == null)
+            {
+                shadow = textComponent.gameObject.AddComponent<Shadow>();
+            }
+
+            shadow.effectColor = new Color(0f, 0f, 0f, 0.75f);
+            shadow.effectDistance = new Vector2(1.5f, -1.5f);
+            shadow.useGraphicAlpha = true;
+        }
     }
 
     public void InitializeTitleBar()
