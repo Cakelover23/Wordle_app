@@ -17,11 +17,35 @@ public class TitleBar : MonoBehaviour
     [SerializeField] private string[] barTexts = new string[3];
     [SerializeField] private Color[] barColours = new Color[3];
 
+    // Cached once in Awake so LateUpdate (see below) doesn't need to re-run GetComponentInChildren
+    // every single frame.
+    private readonly Text[] _barTextComponents = new Text[3];
+    private readonly Image[] _barImageComponents = new Image[3];
+    private bool _themeApplied;
+
+    private void Awake()
+    {
+        CacheBar(0, titleBar1);
+        CacheBar(1, titleBar2);
+        CacheBar(2, titleBar3);
+    }
+
+    private void CacheBar(int index, GameObject bar)
+    {
+        if (bar == null)
+        {
+            return;
+        }
+
+        _barTextComponents[index] = bar.GetComponentInChildren<Text>(true);
+        _barImageComponents[index] = bar.GetComponentInChildren<Image>(true);
+    }
+
     public void InitializeTitleBar()
     {
-        ApplyBar(titleBar1, barTexts[0], barColours[0]);
-        ApplyBar(titleBar2, barTexts[1], barColours[1]);
-        ApplyBar(titleBar3, barTexts[2], barColours[2]);
+        ApplyBar(0);
+        ApplyBar(1);
+        ApplyBar(2);
     }
 
     /// <summary>
@@ -50,6 +74,7 @@ public class TitleBar : MonoBehaviour
         SetBar(0, ToHex(box1), box1);
         SetBar(1, ToHex(box2), box2);
         SetBar(2, ToHex(box3), box3);
+        _themeApplied = true;
     }
 
     private static string ToHex(Color color)
@@ -66,38 +91,40 @@ public class TitleBar : MonoBehaviour
 
         barTexts[index] = text;
         barColours[index] = colour;
+        ApplyBar(index);
+    }
 
-        switch (index)
+    private void ApplyBar(int index)
+    {
+        Text textComponent = _barTextComponents[index];
+        if (textComponent != null)
         {
-            case 0:
-                ApplyBar(titleBar1, barTexts[0], barColours[0]);
-                break;
-            case 1:
-                ApplyBar(titleBar2, barTexts[1], barColours[1]);
-                break;
-            case 2:
-                ApplyBar(titleBar3, barTexts[2], barColours[2]);
-                break;
+            textComponent.text = barTexts[index];
+        }
+
+        Image imageComponent = _barImageComponents[index];
+        if (imageComponent != null)
+        {
+            imageComponent.color = barColours[index];
         }
     }
 
-    private void ApplyBar(GameObject bar, string text, Color colour)
+    /// <summary>
+    /// The CloseMain/OpenMain Animator clips animate each box's own Image.color curve directly
+    /// (part of their open/close visual effect), which would silently overwrite our theme color
+    /// every single frame if we only applied it once. LateUpdate always runs after the Animator's
+    /// own update, so re-applying here every frame guarantees our theme color - and hex code text -
+    /// wins over the placeholder color/text baked into those animation clips.
+    /// </summary>
+    private void LateUpdate()
     {
-        if (bar == null)
+        if (!_themeApplied)
         {
             return;
         }
 
-        var textComponent = bar.GetComponentInChildren<Text>(true);
-        if (textComponent != null)
-        {
-            textComponent.text = text;
-        }
-
-        var imageComponent = bar.GetComponentInChildren<Image>(true);
-        if (imageComponent != null)
-        {
-            imageComponent.color = colour;
-        }
+        ApplyBar(0);
+        ApplyBar(1);
+        ApplyBar(2);
     }
 }

@@ -13,6 +13,11 @@ public static class ThemeService
 {
     private const string PlayerPrefsKey = "SelectedThemeIndex";
 
+    // Index 3 = "Showa Diner" (see Themes below) - the player's chosen default look. Only used the
+    // very first time the game runs on a device (no PlayerPrefs value saved yet); anyone who has
+    // already picked a theme keeps their existing choice.
+    private const int DefaultThemeIndex = 3;
+
     public static readonly GameTheme[] Themes =
     {
         // Placeholder entry for index 0 - values here are never read (see IsOriginal/Current).
@@ -74,7 +79,7 @@ public static class ThemeService
 
     public static int SelectedIndex
     {
-        get => Mathf.Clamp(PlayerPrefs.GetInt(PlayerPrefsKey, 0), 0, Themes.Length - 1);
+        get => Mathf.Clamp(PlayerPrefs.GetInt(PlayerPrefsKey, DefaultThemeIndex), 0, Themes.Length - 1);
         set
         {
             int clamped = Mathf.Clamp(value, 0, Themes.Length - 1);
