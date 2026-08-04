@@ -39,6 +39,7 @@
   <Project Path="Unity.Postprocessing.Editor.csproj" />
   <Project Path="Unity.AI.Navigation.csproj" />
   <Project Path="Unity.2D.Tilemap.Extras.Editor.csproj" />
+  <Project Path="Unity.Mobile.AndroidLogcat.Editor.csproj" />
   <Project Path="Unity.2D.Animation.Runtime.csproj" />
   <Project Path="UnityEditor.UI.csproj" />
   <Project Path="Unity.TextMeshPro.csproj" />
