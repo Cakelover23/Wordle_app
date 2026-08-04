@@ -1,67 +1,59 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
-    <ui:Style src="GameHud.uss" />
-    <ui:VisualElement name="hud-root" class="hud-root" picking-mode="Ignore">
-
-        <ui:VisualElement name="top-bar" class="top-bar">
-            <ui:Button name="menu-button" text="Menu" class="chrome-button" />
-            <!-- Hidden: no in-game reason to pause. Underlying pause logic is left intact in
-                 GameHudController in case this is ever brought back. -->
-            <ui:Button name="pause-button" text="Pause" class="chrome-button hidden" />
-            <ui:Button name="stats-button" text="Stats" class="chrome-button" />
-            <ui:Button name="leaderboard-button" text="Ranks" class="chrome-button" />
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/Resources/UI/GameHud/GameHud.uss?fileID=7433441132597879392&amp;guid=9914a21a73707b44c84b9dbe02d8140b&amp;type=3#GameHud"/>
+    <ui:VisualElement name="hud-root" picking-mode="Ignore" class="hud-root" style="padding-top: 300px;">
+        <ui:VisualElement name="top-bar" class="top-bar" style="padding-top: 121px;">
+            <ui:Button name="menu-button" text="Menu" class="chrome-button"/>
+            <ui:Button name="pause-button" text="Pause" class="chrome-button hidden"/>
+            <ui:Button name="stats-button" text="Stats" class="chrome-button"/>
+            <ui:Button name="leaderboard-button" text="Ranks" class="chrome-button"/>
         </ui:VisualElement>
-
         <ui:VisualElement name="pause-panel" class="modal-backdrop hidden">
             <ui:VisualElement class="modal-card">
-                <ui:Label text="Paused" class="modal-title" />
-                <ui:Button name="resume-button" text="Resume" class="modal-button" />
+                <ui:Label text="Paused" class="modal-title"/>
+                <ui:Button name="resume-button" text="Resume" class="modal-button"/>
             </ui:VisualElement>
         </ui:VisualElement>
-
         <ui:VisualElement name="stats-panel" class="modal-backdrop hidden">
             <ui:VisualElement class="modal-card">
-                <ui:Label text="Statistics" class="modal-title" />
+                <ui:Label text="Statistics" class="modal-title"/>
                 <ui:VisualElement class="stats-row">
-                    <ui:Label text="Games Played" class="stats-label" />
-                    <ui:Label name="stats-games" text="0" class="stats-value" />
+                    <ui:Label text="Games Played" class="stats-label"/>
+                    <ui:Label name="stats-games" text="0" class="stats-value"/>
                 </ui:VisualElement>
                 <ui:VisualElement class="stats-row">
-                    <ui:Label text="Wins" class="stats-label" />
-                    <ui:Label name="stats-wins" text="0" class="stats-value" />
+                    <ui:Label text="Wins" class="stats-label"/>
+                    <ui:Label name="stats-wins" text="0" class="stats-value"/>
                 </ui:VisualElement>
                 <ui:VisualElement class="stats-row">
-                    <ui:Label text="Losses" class="stats-label" />
-                    <ui:Label name="stats-losses" text="0" class="stats-value" />
+                    <ui:Label text="Losses" class="stats-label"/>
+                    <ui:Label name="stats-losses" text="0" class="stats-value"/>
                 </ui:VisualElement>
                 <ui:VisualElement class="stats-row">
-                    <ui:Label text="Current Streak" class="stats-label" />
-                    <ui:Label name="stats-streak" text="0" class="stats-value" />
+                    <ui:Label text="Current Streak" class="stats-label"/>
+                    <ui:Label name="stats-streak" text="0" class="stats-value"/>
                 </ui:VisualElement>
                 <ui:VisualElement class="stats-row">
-                    <ui:Label text="Total Guesses" class="stats-label" />
-                    <ui:Label name="stats-guesses" text="0" class="stats-value" />
+                    <ui:Label text="Total Guesses" class="stats-label"/>
+                    <ui:Label name="stats-guesses" text="0" class="stats-value"/>
                 </ui:VisualElement>
-                <ui:Button name="stats-close-button" text="Close" class="modal-button" />
+                <ui:Button name="stats-close-button" text="Close" class="modal-button"/>
             </ui:VisualElement>
         </ui:VisualElement>
-
         <ui:VisualElement name="leaderboard-panel" class="modal-backdrop hidden">
             <ui:VisualElement class="modal-card">
-                <ui:Label text="Leaderboard" class="modal-title" />
+                <ui:Label text="Leaderboard" class="modal-title"/>
                 <ui:ScrollView name="leaderboard-scroll" class="leaderboard-scroll">
-                    <ui:VisualElement name="leaderboard-list" class="leaderboard-list" />
+                    <ui:VisualElement name="leaderboard-list" class="leaderboard-list"/>
                 </ui:ScrollView>
-                <ui:Button name="leaderboard-close-button" text="Close" class="modal-button" />
+                <ui:Button name="leaderboard-close-button" text="Close" class="modal-button"/>
             </ui:VisualElement>
         </ui:VisualElement>
-
         <ui:VisualElement name="username-panel" class="modal-backdrop hidden">
             <ui:VisualElement class="modal-card">
-                <ui:Label text="Choose a Username" class="modal-title" />
-                <ui:TextField name="username-field" class="username-field" />
-                <ui:Button name="username-submit-button" text="Submit" class="modal-button" />
+                <ui:Label text="Choose a Username" class="modal-title"/>
+                <ui:TextField name="username-field" class="username-field"/>
+                <ui:Button name="username-submit-button" text="Submit" class="modal-button"/>
             </ui:VisualElement>
         </ui:VisualElement>
-
     </ui:VisualElement>
 </ui:UXML>
