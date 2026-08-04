@@ -255,6 +255,30 @@ public class Board : MonoBehaviour
         HideButtonVisual(enterButton);
     }
 
+    /// <summary>
+    /// Hides the legacy "New Word" button's rendering the same way HideLegacyKeyboardVisuals()
+    /// does, without touching newWordButton's GameObject active state - OnEnable()/OnDisable()
+    /// above unconditionally call newWordButton.SetActive(...), so disabling the GameObject (or
+    /// nulling the reference) here would either fight that or throw a NullReferenceException.
+    /// Disabling its Image/Text components instead leaves it invisible and non-interactive no
+    /// matter what state Board.OnEnable/OnDisable toggle it to, while a UI Toolkit "New Word"
+    /// button (GameHudController) takes over the actual behavior.
+    /// </summary>
+    public void HideLegacyNewWordButtonVisuals()
+    {
+        if (newWordButton == null)
+        {
+            return;
+        }
+
+        Button legacyButton = newWordButton.GetComponent<Button>();
+        if (legacyButton != null)
+        {
+            legacyButton.interactable = false;
+            HideButtonVisual(legacyButton);
+        }
+    }
+
     private static void HideButtonVisual(Button button)
     {
         if (button == null)

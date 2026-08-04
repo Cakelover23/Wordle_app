@@ -26,10 +26,12 @@ public class GameHudController : MonoBehaviour
 
     private TextField _usernameField;
     private Button _pauseButton;
+    private Button _newWordButton;
 
     private UIManager _legacyUIManager;
     private Stats _stats;
     private LeaderBoardManager _leaderBoardManager;
+    private Board _board;
     private GameObject _onScreenKeyboard;
     private GameObject _correctWordText;
 
@@ -40,6 +42,7 @@ public class GameHudController : MonoBehaviour
         _pauseButton = root.Q<Button>("pause-button");
         Button statsButton = root.Q<Button>("stats-button");
         Button leaderboardButton = root.Q<Button>("leaderboard-button");
+        _newWordButton = root.Q<Button>("new-word-button");
 
         _pausePanel = root.Q<VisualElement>("pause-panel");
         _statsPanel = root.Q<VisualElement>("stats-panel");
@@ -63,6 +66,7 @@ public class GameHudController : MonoBehaviour
         leaderboardButton.clicked += DisplayLeaderBoard;
         root.Q<Button>("leaderboard-close-button").clicked += () => Hide(_leaderboardPanel);
         root.Q<Button>("username-submit-button").clicked += SubmitUsername;
+        _newWordButton.clicked += StartNewWord;
 
         ThemeService.ApplyAccent(root, "modal-button");
 
@@ -103,6 +107,8 @@ public class GameHudController : MonoBehaviour
         _leaderBoardManager = _legacyUIManager.LeaderBoardManager;
         _onScreenKeyboard = _legacyUIManager.Keyboard;
         _correctWordText = _legacyUIManager.CorrectWordText;
+        _board = FindFirstObjectByType<Board>();
+        _board?.HideLegacyNewWordButtonVisuals();
 
         // Hand control of these GameObjects over to this HUD; disable the legacy panels so
         // they don't render underneath / duplicate ours.
@@ -241,12 +247,14 @@ public class GameHudController : MonoBehaviour
     private void UIGameStart()
     {
         SetActiveIfNotNull(_correctWordText, false);
+        Hide(_newWordButton);
         ResumeGame();
     }
 
     private void UIGameEnd()
     {
         _pauseButton.SetEnabled(false);
+        Show(_newWordButton);
         _leaderBoardManager?.UploadCurrentWinStreak();
     }
 
@@ -256,6 +264,8 @@ public class GameHudController : MonoBehaviour
     }
 
     #endregion
+
+    private void StartNewWord() => _board?.NewGame();
 
     private static void Show(VisualElement element) => element.RemoveFromClassList("hidden");
     private static void Hide(VisualElement element) => element.AddToClassList("hidden");

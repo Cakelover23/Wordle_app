@@ -6,6 +6,7 @@
             <ui:Button name="pause-button" text="Pause" class="chrome-button hidden"/>
             <ui:Button name="stats-button" text="Stats" class="chrome-button"/>
             <ui:Button name="leaderboard-button" text="Ranks" class="chrome-button"/>
+            <ui:Button name="new-word-button" text="New Word" class="chrome-button hidden"/>
         </ui:VisualElement>
         <ui:VisualElement name="pause-panel" class="modal-backdrop hidden">
             <ui:VisualElement class="modal-card">
