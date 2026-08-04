@@ -1,6 +1,8 @@
+@import url("unity-theme://default");
+
+
 /* Minimal runtime theme so PanelSettings has a themeStyleSheet assigned and the
    "No Theme Style Sheet" warning goes away. This pulls in Unity's built-in default
    runtime theme (same content Unity generates via Assets > Create > UI Toolkit >
    Default Runtime Theme) so default control chrome (ScrollView scrollbars, etc.)
    still has sensible built-in styling underneath our own CategorySelect.uss rules. */
-@import url("unity-theme://default");

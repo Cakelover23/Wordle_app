@@ -3,16 +3,18 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 /// <summary>
-/// Auto-creates the UI Toolkit Game HUD (Pause/Stats/Leaderboard/Username) the moment a game
-/// scene loads - no manual scene wiring required. Mirrors <see cref="CategorySelectBootstrapper"/>.
+/// Auto-creates the UI Toolkit board grid (Board.uxml/.uss) the moment a game scene loads - no
+/// manual scene wiring required. Mirrors <see cref="CategorySelectBootstrapper"/> and
+/// <see cref="GameHudBootstrapper"/>. Renders below GameHud (lower sortingOrder) so Pause/Stats/
+/// Leaderboard modals still draw on top of the board.
 /// </summary>
-public static class GameHudBootstrapper
+public static class BoardUIToolkitBootstrapper
 {
     private static readonly string[] TargetSceneNames = { "FiveLetterWordle", "SixLetterWordle" };
 
-    private const string PanelSettingsResourcePath = "UI/GameHud/GameHudPanelSettings";
-    private const string ThemeResourcePath = "UI/GameHud/GameHudTheme";
-    private const string VisualTreeResourcePath = "UI/GameHud/GameHud";
+    private const string PanelSettingsResourcePath = "UI/Board/BoardPanelSettings";
+    private const string ThemeResourcePath = "UI/Board/BoardTheme";
+    private const string VisualTreeResourcePath = "UI/Board/Board";
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     private static void Install()
@@ -45,7 +47,7 @@ public static class GameHudBootstrapper
 
     public static void Show()
     {
-        if (Object.FindFirstObjectByType<GameHudController>() != null)
+        if (Object.FindFirstObjectByType<BoardUIToolkitController>() != null)
         {
             return; // Already built for this scene load.
         }
@@ -53,15 +55,15 @@ public static class GameHudBootstrapper
         var visualTreeAsset = Resources.Load<VisualTreeAsset>(VisualTreeResourcePath);
         if (visualTreeAsset == null)
         {
-            Debug.LogError($"GameHudBootstrapper: missing VisualTreeAsset at Resources/{VisualTreeResourcePath}");
+            Debug.LogError($"BoardUIToolkitBootstrapper: missing VisualTreeAsset at Resources/{VisualTreeResourcePath}");
             return;
         }
 
-        var host = new GameObject("GameHudUISystem");
+        var host = new GameObject("BoardUISystem");
         var uiDocument = host.AddComponent<UIDocument>();
         uiDocument.panelSettings = LoadOrCreatePanelSettings();
         uiDocument.visualTreeAsset = visualTreeAsset;
-        host.AddComponent<GameHudController>();
+        host.AddComponent<BoardUIToolkitController>();
     }
 
     private static PanelSettings LoadOrCreatePanelSettings()
@@ -73,18 +75,16 @@ public static class GameHudBootstrapper
         }
 
         var settings = ScriptableObject.CreateInstance<PanelSettings>();
-        // ScaleWithScreenSize against the project's actual target resolution (1440x3200
-        // portrait phone) scales the whole panel proportionally to fit whatever the current
-        // render target size is - pixel-accurate at 1440x3200 (the real device) and cleanly
-        // scaled down (no cropping/overflow) in a smaller Editor Game View, as long as
-        // GameHud.uss values are sized for the 1440x3200 reference (which they are).
+        // Same scaling approach as GameHud/CategorySelect: scale proportionally toward the
+        // project's real 1440x3200 target so Board.uss px values are correct on-device while
+        // still fitting a smaller Editor Game View.
         settings.scaleMode = PanelScaleMode.ScaleWithScreenSize;
         settings.referenceResolution = new Vector2Int(1440, 3200);
         settings.screenMatchMode = PanelScreenMatchMode.MatchWidthOrHeight;
         settings.match = 0.5f;
-        // Higher than BoardUIToolkitBootstrapper's sortingOrder (0) so Pause/Stats/Leaderboard
-        // modals draw on top of the board grid instead of underneath it.
-        settings.sortingOrder = 10;
+        // Lower than GameHud's sortingOrder (10) so Pause/Stats/Leaderboard modals draw on top
+        // of the board grid instead of underneath it.
+        settings.sortingOrder = 0;
 
         var theme = Resources.Load<ThemeStyleSheet>(ThemeResourcePath);
         if (theme != null)

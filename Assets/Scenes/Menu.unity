@@ -13,7 +13,7 @@ OcclusionCullingSettings:
 --- !u!104 &2
 RenderSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 9
+  serializedVersion: 10
   m_Fog: 0
   m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   m_FogMode: 3
@@ -42,8 +42,8 @@ RenderSettings:
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 12
-  m_GIWorkflowMode: 1
+  serializedVersion: 13
+  m_BakeOnSceneLoad: 0
   m_GISettings:
     serializedVersion: 2
     m_BounceScale: 1
@@ -66,9 +66,6 @@ LightmapSettings:
     m_LightmapParameters: {fileID: 0}
     m_LightmapsBakeMode: 1
     m_TextureCompression: 1
-    m_FinalGather: 0
-    m_FinalGatherFiltering: 1
-    m_FinalGatherRayCount: 256
     m_ReflectionCompression: 2
     m_MixedBakeMode: 2
     m_BakeBackend: 1
@@ -297,31 +294,35 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4502059922535100671, guid: eb6a70d5d0019934d9b19badc9144ac5, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4502059922535100671, guid: eb6a70d5d0019934d9b19badc9144ac5, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4502059922535100671, guid: eb6a70d5d0019934d9b19badc9144ac5, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: -4.775
       objectReference: {fileID: 0}
     - target: {fileID: 4502059922550198572, guid: eb6a70d5d0019934d9b19badc9144ac5, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4502059922550198572, guid: eb6a70d5d0019934d9b19badc9144ac5, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4502059923806975373, guid: eb6a70d5d0019934d9b19badc9144ac5, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: -1125.037
       objectReference: {fileID: 0}
     - target: {fileID: 4502059924092522481, guid: eb6a70d5d0019934d9b19badc9144ac5, type: 3}
       propertyPath: m_Name
       value: Ranking
+      objectReference: {fileID: 0}
+    - target: {fileID: 4502059924092522481, guid: eb6a70d5d0019934d9b19badc9144ac5, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4502059924092522486, guid: eb6a70d5d0019934d9b19badc9144ac5, type: 3}
       propertyPath: m_Pivot.x
@@ -385,11 +386,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4502059924092522486, guid: eb6a70d5d0019934d9b19badc9144ac5, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -266.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4502059924092522486, guid: eb6a70d5d0019934d9b19badc9144ac5, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -2464
+      value: -1987
       objectReference: {fileID: 0}
     - target: {fileID: 4502059924092522486, guid: eb6a70d5d0019934d9b19badc9144ac5, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -485,6 +486,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
+  m_UseReflectionProbes: 0
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0

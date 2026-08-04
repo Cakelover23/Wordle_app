@@ -18,6 +18,10 @@ public class Board : MonoBehaviour
     private int rowIndex;
     private int columnIndex;
 
+    /// <summary>Read-only access to this board's rows/tiles, for external renderers
+    /// (e.g. BoardUIToolkitController) that need to mirror tile state without owning game logic.</summary>
+    public Row[] Rows => rows;
+
     protected string[] solutions;
     protected HashSet<string> validWords;
     private string word;

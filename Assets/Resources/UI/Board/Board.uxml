@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:Style src="Board.uss" />
+    <ui:VisualElement name="board-root" class="board-root">
+        <ui:VisualElement name="board-grid" class="board-grid" />
+    </ui:VisualElement>
+</ui:UXML>
