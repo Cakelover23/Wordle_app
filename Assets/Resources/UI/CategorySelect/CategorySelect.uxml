@@ -1,0 +1,25 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/Resources/UI/CategorySelect/CategorySelect.uss?fileID=7433441132597879392&amp;guid=e3604c172f761d74483e950921a05887&amp;type=3#CategorySelect"/>
+    <ui:VisualElement name="root" class="category-select-root" style="padding-top: 300px;">
+        <ui:Label text="Choose a Word Bank" name="title-label" class="title"/>
+        <ui:VisualElement name="length-tabs" class="length-tabs">
+            <ui:Button name="tab-five-letter" text="5 Letters" class="tab-button tab-button--active"/>
+            <ui:Button name="tab-six-letter" text="6 Letters" class="tab-button"/>
+        </ui:VisualElement>
+        <ui:VisualElement name="theme-row" class="theme-row">
+            <ui:Label text="Theme" class="theme-row__label"/>
+            <ui:VisualElement name="theme-swatches" class="theme-swatches"/>
+        </ui:VisualElement>
+        <ui:ScrollView name="category-scroll" class="category-scroll">
+            <ui:VisualElement name="category-list" class="category-list"/>
+        </ui:ScrollView>
+        <ui:Button name="back-button" text="Back" class="back-button hidden"/>
+        <ui:VisualElement name="username-panel" class="modal-backdrop hidden">
+            <ui:VisualElement class="modal-card">
+                <ui:Label text="Choose a Username" class="modal-title"/>
+                <ui:TextField name="username-field" class="username-field"/>
+                <ui:Button name="username-submit-button" text="Submit" class="modal-button"/>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

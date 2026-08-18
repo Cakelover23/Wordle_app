@@ -1,0 +1,162 @@
+.category-select-root {
+    flex: 1;
+    padding: 72px;
+    background-color: rgb(24, 24, 28);
+    align-items: stretch;
+}
+
+.title {
+    font-size: 84px;
+    -unity-font-style: bold;
+    color: rgb(240, 240, 240);
+    -unity-text-align: upper-center;
+    margin-bottom: 48px;
+}
+
+.length-tabs {
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 36px;
+}
+
+.tab-button {
+    flex-grow: 1;
+    margin: 0 12px;
+    padding: 30px;
+    font-size: 42px;
+    background-color: rgb(45, 45, 52);
+    color: rgb(200, 200, 200);
+    border-width: 0;
+    border-radius: 20px;
+}
+
+.tab-button--active {
+    background-color: rgb(83, 141, 78);
+    color: rgb(255, 255, 255);
+}
+
+.theme-row {
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 36px;
+}
+
+.theme-row__label {
+    font-size: 39px;
+    color: rgb(200, 200, 200);
+    margin-right: 24px;
+}
+
+.theme-swatches {
+    flex-direction: row;
+    flex-wrap: wrap;
+    flex-grow: 1;
+}
+
+.theme-swatch {
+    width: 72px;
+    height: 72px;
+    border-radius: 36px;
+    margin-right: 18px;
+    margin-bottom: 12px;
+    border-width: 4px;
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.theme-swatch--selected {
+    border-color: rgb(255, 255, 255);
+    border-width: 6px;
+}
+
+.hidden {
+    display: none;
+}
+
+.category-scroll {
+    flex: 1;
+}
+
+.category-list {
+    flex-direction: column;
+}
+
+.category-card {
+    background-color: rgb(45, 45, 52);
+    border-radius: 28px;
+    padding: 42px;
+    margin-bottom: 30px;
+}
+
+.category-card:hover {
+    background-color: rgb(58, 58, 66);
+}
+
+.category-card--selected {
+    background-color: rgb(83, 141, 78);
+}
+
+.category-card__name {
+    font-size: 54px;
+    -unity-font-style: bold;
+    color: rgb(240, 240, 240);
+}
+
+.category-card__description {
+    font-size: 39px;
+    color: rgb(190, 190, 190);
+    margin-top: 12px;
+    white-space: normal;
+}
+
+.back-button {
+    margin-top: 48px;
+    padding: 30px;
+    font-size: 42px;
+    background-color: rgb(60, 60, 68);
+    color: rgb(230, 230, 230);
+    border-width: 0;
+    border-radius: 20px;
+}
+
+.modal-backdrop {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.55);
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-card {
+    width: 900px;
+    max-width: 85%;
+    background-color: rgb(38, 38, 44);
+    border-radius: 30px;
+    padding: 60px;
+    align-items: stretch;
+}
+
+.modal-title {
+    font-size: 66px;
+    -unity-font-style: bold;
+    color: rgb(240, 240, 240);
+    -unity-text-align: upper-center;
+    margin-bottom: 42px;
+}
+
+.modal-button {
+    margin-top: 42px;
+    padding: 30px;
+    font-size: 36px;
+    background-color: rgb(83, 141, 78);
+    color: rgb(255, 255, 255);
+    border-width: 0;
+    border-radius: 26px;
+}
+
+.username-field {
+    margin-bottom: 12px;
+    font-size: 36px;
+}

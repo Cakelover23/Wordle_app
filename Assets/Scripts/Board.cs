@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 using System.Collections.Generic;
 using Unity.IO.LowLevel.Unsafe;
 
@@ -17,6 +18,15 @@ public class Board : MonoBehaviour
     private Row[] rows;
     private int rowIndex;
     private int columnIndex;
+
+    /// <summary>Read-only access to this board's rows/tiles, for external renderers
+    /// (e.g. BoardUIToolkitController) that need to mirror tile state without owning game logic.</summary>
+    public Row[] Rows => rows;
+
+    /// <summary>Raised whenever a keyboard letter's color changes (correct/wrong-spot/incorrect/
+    /// reset to default), so an external renderer (e.g. KeyboardUIToolkitController) can mirror
+    /// on-screen keyboard state without duplicating Board's guess-checking logic.</summary>
+    public event Action<char, Color> LetterKeyColorChanged;
 
     protected string[] solutions;
     protected HashSet<string> validWords;
@@ -49,8 +59,57 @@ public class Board : MonoBehaviour
     // Dictionary to map letters to their corresponding buttons
     private Dictionary<char, Button> letterButtonMap;
 
+    /// <summary>
+    /// Overwrites this board's tile/keyboard colors with the player's selected theme (see
+    /// ThemeService). Runs at the very start of Awake() - before letterButtonMap is built and
+    /// before NewGame() colors any tiles - so every subsequent color read (both here and by
+    /// BoardUIToolkitController/KeyboardUIToolkitController, which read these fields live) already
+    /// reflects the theme with no race against scene-load bootstrappers. When the player has the
+    /// "Original" theme selected this is a no-op, so nothing changes from before this feature
+    /// existed.
+    /// </summary>
+    private void ApplyTheme()
+    {
+        if (ThemeService.IsOriginal)
+        {
+            return;
+        }
+
+        GameTheme theme = ThemeService.Current;
+
+        correctState.fillColor = theme.correct;
+        wrongSpotState.fillColor = theme.wrongSpot;
+        incorrectState.fillColor = theme.incorrect;
+        emptyState.fillColor = theme.tileEmpty;
+        occupiedState.fillColor = theme.tileOccupied;
+
+        correctColor = theme.correct;
+        wrongSpotColor = theme.wrongSpot;
+        incorrectColor = theme.incorrect;
+        defaultColor = theme.keyDefault;
+
+        // Legacy uGUI buttons carry their own idle color in a ColorBlock rather than reading
+        // defaultColor directly, so give each key button the themed default too.
+        if (letterButtons != null)
+        {
+            foreach (Button button in letterButtons)
+            {
+                if (button == null)
+                {
+                    continue;
+                }
+
+                ColorBlock colors = button.colors;
+                colors.normalColor = theme.keyDefault;
+                button.colors = colors;
+            }
+        }
+    }
+
     private void Awake()
     {
+        ApplyTheme();
+
         rows = GetComponentsInChildren<Row>();
 
         // Initialize the dictionary
@@ -62,7 +121,12 @@ public class Board : MonoBehaviour
             TMP_Text buttonText = button.GetComponentInChildren<TMP_Text>();
             if (buttonText != null)
             {
-                char letter = buttonText.text[0];
+                // Some legacy button labels only look uppercase due to a "Character Casing"
+                // style override on the TMP component - the underlying text can actually be
+                // either case. Normalize to lowercase here so letterButtonMap's keys always
+                // match tile.letter's casing (always lowercase, from both physical-keyboard
+                // input and the UI Toolkit keyboard) without guessing which case is "real".
+                char letter = char.ToLowerInvariant(buttonText.text[0]);
                 letterButtonMap[letter] = button; // Map the letter to the button
                 button.onClick.AddListener(() => OnLetterButtonClick(letter));
             }
@@ -98,13 +162,48 @@ public class Board : MonoBehaviour
         NewGame();
     }
 
+    // Word length for this board; SixBoard overrides this to 6.
+    protected virtual int WordLength => 5;
+
+    // Used only if no matching WordCategory can be found (keeps old scenes working untouched).
+    protected virtual string DefaultSolutionsResource => "official_wordle_common";
+    protected virtual string DefaultValidWordsResource => "official_wordle_all";
+
     protected virtual void LoadData()
     {
-        TextAsset textFile = Resources.Load("official_wordle_common") as TextAsset;
+        WordCategory category = CategorySelectionService.GetSelectedCategory(WordLength);
+        string solutionsPath = category != null ? category.solutionsPath : DefaultSolutionsResource;
+        string validWordsPath = category != null ? category.validWordsPath : DefaultValidWordsResource;
+
+        TextAsset textFile = Resources.Load<TextAsset>(solutionsPath);
         solutions = textFile.text.Split('\n');
 
-        textFile = Resources.Load("official_wordle_all") as TextAsset;
-        validWords = new HashSet<string>(textFile.text.Split('\n'));
+        textFile = Resources.Load<TextAsset>(validWordsPath);
+        validWords = new HashSet<string>();
+        foreach (string line in textFile.text.Split('\n'))
+        {
+            // Some word list files (e.g. official_wordle_all.txt) use Windows-style CRLF line
+            // endings; splitting on '\n' alone leaves a trailing '\r' on every line except the
+            // last, which would silently fail every guess-validity Contains() check below.
+            string trimmed = line.ToLower().Trim();
+            if (trimmed.Length > 0)
+            {
+                validWords.Add(trimmed);
+            }
+        }
+
+        // Themed categories share the big classic dictionaries as their valid-guess list, so
+        // make sure every one of this category's own solution words is guessable too, even if
+        // a particular themed word (e.g. a genre or franchise-adjacent term) isn't in that
+        // dictionary.
+        foreach (string solution in solutions)
+        {
+            string trimmed = solution.ToLower().Trim();
+            if (trimmed.Length > 0)
+            {
+                validWords.Add(trimmed);
+            }
+        }
     }
 
     public void NewGame()
@@ -114,6 +213,90 @@ public class Board : MonoBehaviour
         GameManager.GameEvents.GameStart.TriggerEvent();
         ResetAllLetterButtons();
         enabled = true;
+    }
+
+    /// <summary>Letters this board has an on-screen keyboard key for, in the same casing used by
+    /// the legacy keyboard buttons (matches the labels' text, e.g. uppercase 'Q').</summary>
+    public IEnumerable<char> KeyboardLetters => letterButtonMap.Keys;
+
+    /// <summary>Current display color for a keyboard letter key (default/correct/wrong-spot/
+    /// incorrect), for external renderers to initialize from before subscribing to
+    /// <see cref="LetterKeyColorChanged"/>.</summary>
+    public Color GetKeyColor(char letter)
+    {
+        return letterButtonMap.TryGetValue(letter, out Button button) ? button.colors.normalColor : defaultColor;
+    }
+
+    /// <summary>Forwards a letter key press to the same logic the legacy on-screen keyboard
+    /// button uses, for an external UI Toolkit keyboard renderer to call.</summary>
+    public void PressLetterKey(char letter) => OnLetterButtonClick(letter);
+
+    /// <summary>Forwards a backspace key press to the same logic the legacy backspace button
+    /// uses, for an external UI Toolkit keyboard renderer to call.</summary>
+    public void PressBackspaceKey() => OnBackspaceButtonClick();
+
+    /// <summary>Forwards an enter key press to the same logic the legacy enter button uses, for
+    /// an external UI Toolkit keyboard renderer to call.</summary>
+    public void PressEnterKey() => OnEnterButtonClick();
+
+    /// <summary>
+    /// Hides the legacy on-screen keyboard's rendering (button backgrounds/labels) without
+    /// disabling the GameObjects, so Board's game logic (letterButtonMap, click handlers) keeps
+    /// working untouched while a UI Toolkit keyboard (KeyboardUIToolkitController) renders in
+    /// its place.
+    /// </summary>
+    public void HideLegacyKeyboardVisuals()
+    {
+        foreach (Button button in letterButtons)
+        {
+            HideButtonVisual(button);
+        }
+        HideButtonVisual(backspaceButton);
+        HideButtonVisual(enterButton);
+    }
+
+    /// <summary>
+    /// Hides the legacy "New Word" button's rendering the same way HideLegacyKeyboardVisuals()
+    /// does, without touching newWordButton's GameObject active state - OnEnable()/OnDisable()
+    /// above unconditionally call newWordButton.SetActive(...), so disabling the GameObject (or
+    /// nulling the reference) here would either fight that or throw a NullReferenceException.
+    /// Disabling its Image/Text components instead leaves it invisible and non-interactive no
+    /// matter what state Board.OnEnable/OnDisable toggle it to, while a UI Toolkit "New Word"
+    /// button (GameHudController) takes over the actual behavior.
+    /// </summary>
+    public void HideLegacyNewWordButtonVisuals()
+    {
+        if (newWordButton == null)
+        {
+            return;
+        }
+
+        Button legacyButton = newWordButton.GetComponent<Button>();
+        if (legacyButton != null)
+        {
+            legacyButton.interactable = false;
+            HideButtonVisual(legacyButton);
+        }
+    }
+
+    private static void HideButtonVisual(Button button)
+    {
+        if (button == null)
+        {
+            return;
+        }
+
+        Image image = button.GetComponent<Image>();
+        if (image != null)
+        {
+            image.enabled = false;
+        }
+
+        TMP_Text text = button.GetComponentInChildren<TMP_Text>();
+        if (text != null)
+        {
+            text.enabled = false;
+        }
     }
 
     public void TryAgain()
@@ -131,7 +314,7 @@ public class Board : MonoBehaviour
 
     private void SetRandomWord()
     {
-        word = solutions[Random.Range(0, solutions.Length)].ToLower().Trim();
+        word = solutions[UnityEngine.Random.Range(0, solutions.Length)].ToLower().Trim();
         correctWordText.GetComponent<TMP_Text>().SetText(word);
         Debug.Log("New word set: " + word);
     }
@@ -319,45 +502,55 @@ public class Board : MonoBehaviour
     private void DisableLetterButton(char letter)
     {
         Debug.Log($"Attempting to disable letter: {letter}");
-    
-        if (letterButtonMap.ContainsKey(letter) && letterButtonMap[letter].colors.normalColor != correctColor && letterButtonMap[letter].colors.normalColor != wrongSpotColor)
+
+        // letterButtonMap keys are lowercase (normalized in Awake), matching tile.letter's
+        // casing (always lowercase, from both physical-keyboard input and the UI Toolkit
+        // keyboard), so normalize here too in case a caller ever passes an uppercase letter.
+        char key = char.ToLowerInvariant(letter);
+        if (letterButtonMap.ContainsKey(key) && letterButtonMap[key].colors.normalColor != correctColor && letterButtonMap[key].colors.normalColor != wrongSpotColor)
         {
-            ColorBlock colors = letterButtonMap[letter].colors;
+            ColorBlock colors = letterButtonMap[key].colors;
             colors.normalColor = incorrectColor;
-            letterButtonMap[letter].colors = colors;
+            letterButtonMap[key].colors = colors;
+            LetterKeyColorChanged?.Invoke(key, incorrectColor);
         }
     }
 
     private void CorrectLetterButton(char letter)
     {
-        if (letterButtonMap.ContainsKey(letter))
+        char key = char.ToLowerInvariant(letter);
+        if (letterButtonMap.ContainsKey(key))
         {
-            ColorBlock colors = letterButtonMap[letter].colors;
+            ColorBlock colors = letterButtonMap[key].colors;
             colors.normalColor = correctColor;
-            letterButtonMap[letter].colors = colors;
+            letterButtonMap[key].colors = colors;
+            LetterKeyColorChanged?.Invoke(key, correctColor);
         }
     }
 
     private void WrongSpotLetterButton(char letter)
     {
-        if (letterButtonMap.ContainsKey(letter))
+        char key = char.ToLowerInvariant(letter);
+        if (letterButtonMap.ContainsKey(key))
         {
-            if(letterButtonMap[letter].colors.normalColor != correctColor)
+            if(letterButtonMap[key].colors.normalColor != correctColor)
             {
-                ColorBlock colors = letterButtonMap[letter].colors;
+                ColorBlock colors = letterButtonMap[key].colors;
                 colors.normalColor = wrongSpotColor;
-                letterButtonMap[letter].colors = colors;
+                letterButtonMap[key].colors = colors;
+                LetterKeyColorChanged?.Invoke(key, wrongSpotColor);
             }
         }
     }
 
     private void ResetAllLetterButtons()
     {
-        foreach (Button button in letterButtons)
+        foreach (KeyValuePair<char, Button> entry in letterButtonMap)
         {
-            ColorBlock colors = button.colors;
+            ColorBlock colors = entry.Value.colors;
             colors.normalColor = defaultColor;
-            button.colors = colors;
+            entry.Value.colors = colors;
+            LetterKeyColorChanged?.Invoke(entry.Key, defaultColor);
         }
     }
 }

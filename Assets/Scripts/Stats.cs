@@ -22,12 +22,21 @@ public class Stats : MonoBehaviour
     public UIManager UIManager;
     
     
-    private const string UsernameKey = "Username";
     private const string TotalWinsKey = "TotalWins";
     private const string CurrentWinStreakKey = "CurrentWinStreak";
     private const string TotalGamesPlayedKey = "TotalGamesPlayed";
     private const string TotalLossesKey = "TotalLosses";
     private const string TotalGuessKey = "TotalGuesses";
+
+    private void Awake()
+    {
+        // Load the persisted username as early as possible (Awake runs before any other
+        // component's Start/OnEnable reads Stats.HasUsername), so nothing can race ahead of
+        // PlayerPrefs and mistakenly re-show the username prompt. By the time the player
+        // reaches a game scene, the Menu screen's first-launch prompt (CategorySelectUIController)
+        // has normally already set this via UsernameService.
+        _username = UsernameService.Current;
+    }
 
     private void Start()
     {
@@ -45,25 +54,39 @@ public class Stats : MonoBehaviour
     }
     private void SetupUsername()
     {
-       if (string.IsNullOrEmpty(PlayerPrefs.GetString(UsernameKey)))
+       if (string.IsNullOrEmpty(_username))
        {
             UsernameInput.SetActive(true);
             UIManager.UsernameBeingInput();
 
        }
-        else
-        {
-            _username = PlayerPrefs.GetString(UsernameKey);
-        }
         
         Debug.Log("Username is: " + _username);
     }
     public void SubmitUsername()
     {
         _username = UsernameInput.GetComponentInChildren<InputField>().text;
-        PlayerPrefs.SetString("Username", _username);
+        UsernameService.Set(_username);
         UsernameInput.SetActive(false);
         UIManager.UsernameSubmitted();
+    }
+
+    /// <summary>Whether a username has already been chosen (loaded from PlayerPrefs or submitted this run).</summary>
+    public bool HasUsername => !string.IsNullOrEmpty(_username);
+
+    /// <summary>
+    /// UI-framework-agnostic username submission, for callers (e.g. a UI Toolkit HUD) that
+    /// already have the entered text and don't use the legacy uGUI InputField/UsernameInput panel.
+    /// </summary>
+    public void SubmitUsernameText(string username)
+    {
+        if (string.IsNullOrWhiteSpace(username))
+        {
+            return;
+        }
+
+        UsernameService.Set(username);
+        _username = UsernameService.Current;
     }
 
     public void AddToLosses()

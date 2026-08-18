@@ -1,0 +1,3 @@
+/* Minimal runtime theme so PanelSettings has a themeStyleSheet assigned (avoids the
+   "No Theme Style Sheet" warning/rendering issue). Mirrors CategorySelectTheme.tss. */
+@import url("unity-theme://default");

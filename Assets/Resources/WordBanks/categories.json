@@ -1,0 +1,116 @@
+{
+  "categories": [
+    {
+      "id": "classic5",
+      "displayName": "Classic",
+      "description": "The original Wordle word list.",
+      "wordLength": 5,
+      "solutionsPath": "official_wordle_common",
+      "validWordsPath": "official_wordle_all"
+    },
+    {
+      "id": "movies5",
+      "displayName": "Movies & TV",
+      "description": "Words from the world of film and television.",
+      "wordLength": 5,
+      "solutionsPath": "WordBanks/movies5_solutions",
+      "validWordsPath": "official_wordle_all"
+    },
+    {
+      "id": "sports5",
+      "displayName": "Sports",
+      "description": "Words from the world of sports.",
+      "wordLength": 5,
+      "solutionsPath": "WordBanks/sports5_solutions",
+      "validWordsPath": "official_wordle_all"
+    },
+    {
+      "id": "games5",
+      "displayName": "Video Games",
+      "description": "Words every gamer will know.",
+      "wordLength": 5,
+      "solutionsPath": "WordBanks/games5_solutions",
+      "validWordsPath": "official_wordle_all"
+    },
+    {
+      "id": "animals5",
+      "displayName": "Animals",
+      "description": "Creatures from across the animal kingdom.",
+      "wordLength": 5,
+      "solutionsPath": "WordBanks/animals5_solutions",
+      "validWordsPath": "official_wordle_all"
+    },
+    {
+      "id": "food5",
+      "displayName": "Food & Cooking",
+      "description": "Tasty words from the kitchen and beyond.",
+      "wordLength": 5,
+      "solutionsPath": "WordBanks/food5_solutions",
+      "validWordsPath": "official_wordle_all"
+    },
+    {
+      "id": "nature5",
+      "displayName": "Nature",
+      "description": "Words from the great outdoors.",
+      "wordLength": 5,
+      "solutionsPath": "WordBanks/nature5_solutions",
+      "validWordsPath": "official_wordle_all"
+    },
+    {
+      "id": "classic6",
+      "displayName": "Classic",
+      "description": "The original six-letter word list.",
+      "wordLength": 6,
+      "solutionsPath": "real_six_letter_words",
+      "validWordsPath": "real_six_letter_words_all"
+    },
+    {
+      "id": "movies6",
+      "displayName": "Movies & TV",
+      "description": "Six-letter words from the world of film and television.",
+      "wordLength": 6,
+      "solutionsPath": "WordBanks/movies6_solutions",
+      "validWordsPath": "real_six_letter_words_all"
+    },
+    {
+      "id": "sports6",
+      "displayName": "Sports",
+      "description": "Six-letter words from the world of sports.",
+      "wordLength": 6,
+      "solutionsPath": "WordBanks/sports6_solutions",
+      "validWordsPath": "real_six_letter_words_all"
+    },
+    {
+      "id": "games6",
+      "displayName": "Video Games",
+      "description": "Six-letter words every gamer will know.",
+      "wordLength": 6,
+      "solutionsPath": "WordBanks/games6_solutions",
+      "validWordsPath": "real_six_letter_words_all"
+    },
+    {
+      "id": "animals6",
+      "displayName": "Animals",
+      "description": "Six-letter creatures from across the animal kingdom.",
+      "wordLength": 6,
+      "solutionsPath": "WordBanks/animals6_solutions",
+      "validWordsPath": "real_six_letter_words_all"
+    },
+    {
+      "id": "food6",
+      "displayName": "Food & Cooking",
+      "description": "Six-letter tasty words from the kitchen and beyond.",
+      "wordLength": 6,
+      "solutionsPath": "WordBanks/food6_solutions",
+      "validWordsPath": "real_six_letter_words_all"
+    },
+    {
+      "id": "nature6",
+      "displayName": "Nature",
+      "description": "Six-letter words from the great outdoors.",
+      "wordLength": 6,
+      "solutionsPath": "WordBanks/nature6_solutions",
+      "validWordsPath": "real_six_letter_words_all"
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/Resources/UI/Keyboard/Keyboard.uss?fileID=7433441132597879392&amp;guid=05ae16b061597e94db6262bb30741804&amp;type=3#Keyboard"/>
+    <ui:VisualElement name="keyboard-root" picking-mode="Ignore" class="keyboard-root" style="padding-top: 95px;">
+        <ui:VisualElement name="keyboard-rows" picking-mode="Ignore" class="keyboard-rows"/>
+    </ui:VisualElement>
+</ui:UXML>

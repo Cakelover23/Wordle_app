@@ -51,6 +51,6 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "unity-wordle-tutorial-main.sln",
+    "dotnet.defaultSolution": "cakelover23-special-bassoon.slnx",
     "CodeGPT.apiKey": "CodeGPT Plus Beta"
 }
